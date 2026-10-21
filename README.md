@@ -2,7 +2,7 @@
 
 研究真实显微时序中的创面闭合，比较局部神经更新规则与经典动力学、时序网络的预测行为。
 
-**Research prototype · 开发中。** 已完整校验并解析62条、7,229帧真实创面时序，并可在Web工作台浏览原图、原始薄轮廓和逐帧QC。官方划分映射仍未知，项目采用独立协议。经典基线已完成validation评价；神经模型未训练，尚无正式test结果。
+**Research prototype · 开发中。** 已完整校验并解析62条、7,229帧真实创面时序，并可在Web工作台浏览原图、原始薄轮廓和逐帧QC。官方划分映射仍未知，项目采用独立协议。经典基线已完成validation评价；4种神经配置各3个seed已完成真实训练，正式test评价进行中。
 
 ![MorphoLab真实序列工作台](assets/screenshots/studio-real-sequence.png)
 
@@ -22,9 +22,9 @@ WH01第0帧，1440×900实际浏览器。灰度为真实观测，浅色线为发
 | M0 数据与相关工作审计 | 已通过，限制保留 | 全量解析、来源清单、本地QA、派生目标与独立协议ADR |
 | M1 设计系统与真实数据浏览 | 已通过 | 真实浏览、图层/时间轴/QC、双桌面截图、真实E2E及远端CI |
 | M2 经典基线 | 已通过 | 完整可复现管线、正式validation评价、逐序列指标与负结果 |
-| M3 神经模型 | 核心与训练机制验证通过 | NCA/ConvGRU、保存恢复、CPU与GPU合成核验；真实未训练 |
-| M4 正式神经实验 | 未开始 | 未评估 |
-| M5–M7 软件闭环与发布 | 未实现 | 无可运行 Web 产品 |
+| M3 神经模型 | 真实训练完成 | NCA/ConvGRU及两项消融，12个run各600步；检查点、预算与hash留存 |
+| M4 正式神经实验 | 评价进行中 | 代码先提交再评分；尚无已审查test结论 |
+| M5–M7 软件闭环与发布 | 进行中 | 数据浏览可用；预测作业闭环与发布尚未验收 |
 
 当前可以浏览数据，没有可演示的模型预测。科研结果图将在真实实验落地后加入。
 
@@ -56,7 +56,7 @@ flowchart LR
   E --> F[Web 科研工作台]
 ```
 
-上图表示目标架构，当前已实现项目质量工具与可校验下载器。
+上图表示研究流程，下载审计、预处理、基线、神经训练与真实数据浏览已实现；预测作业接入尚在进行。
 
 ## 从这里开始
 
@@ -87,7 +87,7 @@ uv run --locked python scripts/prepare_data.py
 uv run --locked pytest -q tests/test_download_data.py
 ```
 
-压缩包有62对TIFF，与发布页61条描述不同。审计生成逐帧清单、两条各六帧样本与本地叠加QA；预处理保留所有时间点，其中7,183帧通过64网格QC，46帧标为无效。原图不进入Git，官方划分未知，未开始训练。
+压缩包有62对TIFF，与发布页61条描述不同。审计生成逐帧清单、两条各六帧样本与本地叠加QA；预处理保留所有时间点，其中7,183帧通过64网格QC，46帧标为无效。原图不进入Git，官方划分未知，训练使用明确独立的本项目协议。
 
 启动仅本机监听的只读数据API：
 
@@ -137,7 +137,7 @@ uv run --locked python scripts/evaluate.py
 
 ## 神经模型的运行准备
 
-独立实现的NCA和summary-conditioned ConvGRU已通过数值、梯度及恢复检查，尚未进行真实数据正式训练。[模型结构与训练合同](docs/architecture/forecast-models.md)及[冻结预算](docs/project/decisions/ADR-0002-local-models-and-training-budget.md)公开说明了输入与对照边界。
+独立实现的NCA和summary-conditioned ConvGRU已通过数值、梯度及恢复检查，并已完成12次真实训练。[模型结构与训练合同](docs/architecture/forecast-models.md)、[冻结预算](docs/project/decisions/ADR-0002-local-models-and-training-budget.md)与[实际训练记录](docs/research/training-record-v1.md)公开说明输入、对照边界和每个checkpoint哈希。
 
 ```sh
 # CPU路径；基础审计与数据浏览不需要安装这个extra
@@ -165,4 +165,4 @@ uv run --locked --extra cpu python scripts/train.py --model nca --seed 17
 
 ## English overview
 
-MorphoLab is an early research software project for wound-closure morphodynamics in real microscopy time series. It will compare local neural cellular automata with classical and learned forecasting baselines, with experiment-level splits and traceable evidence. The initial domain is **in vivo Drosophila embryonic laser wounds**. No model has been trained or evaluated yet.
+MorphoLab studies wound-closure morphodynamics in real microscopy time series, comparing local neural cellular automata with classical and learned forecasting baselines. The domain is **in vivo Drosophila embryonic laser wounds**. Twelve real training runs are complete; test evaluation and the prediction workbench are in progress. Sequence groups are proxies for biological independence, and the split is our own protocol rather than the unavailable official mapping.
