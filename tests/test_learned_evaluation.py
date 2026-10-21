@@ -4,11 +4,13 @@ from types import SimpleNamespace
 
 import numpy as np
 import pytest
-import torch
 import yaml
-from morpholab_ml.evaluation import learned
-from morpholab_ml.evaluation.runner import METRICS, PROJECT_ROOT, file_sha256
-from morpholab_ml.training.runner import MODEL_KEYS
+
+torch = pytest.importorskip("torch")
+
+from morpholab_ml.evaluation import learned  # noqa: E402
+from morpholab_ml.evaluation.runner import METRICS, PROJECT_ROOT, file_sha256  # noqa: E402
+from morpholab_ml.training.runner import MODEL_KEYS  # noqa: E402
 
 
 def synthetic_arrays(frames=57):
@@ -103,7 +105,7 @@ def test_summary_rejects_incomplete_or_invalid_rows(corruption):
 def matrix(tmp_path, monkeypatch):
     matrix_root = tmp_path / "matrix"
     matrix_root.mkdir()
-    sha = "056332d083de1527e49342772ecf2ef974813959"
+    sha = learned.git_sha()
     source_names = (
         "training/runner.py",
         "models/forecast.py",
