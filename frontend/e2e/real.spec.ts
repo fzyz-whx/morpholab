@@ -73,7 +73,7 @@ test('actual desktop screenshots have a loaded frame and no page overflow', asyn
       .poll(async () =>
         image.evaluate((element) => {
           const imageRect = element.getBoundingClientRect();
-          const viewportRect = element.parentElement!.getBoundingClientRect();
+          const viewportRect = element.closest('.scientific-viewport')!.getBoundingClientRect();
           return (
             imageRect.top >= viewportRect.top &&
             imageRect.bottom <= viewportRect.bottom &&

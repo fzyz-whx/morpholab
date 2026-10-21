@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     ...devices['Desktop Chrome'],
-    baseURL: 'http://127.0.0.1:5173',
+    baseURL: process.env.MORPHOLAB_E2E_URL ?? 'http://127.0.0.1:5173',
     viewport: { width: 1440, height: 900 },
     channel: process.env.CI || process.platform !== 'win32' ? undefined : 'msedge',
     trace: 'retain-on-failure',
@@ -17,12 +17,14 @@ export default defineConfig({
   },
   projects: [
     { name: 'fixture', testMatch: 'fixture.spec.ts' },
-    { name: 'real-data', testMatch: 'real.spec.ts' },
+    { name: 'real-data', testMatch: /real.*\.spec\.ts/ },
   ],
-  webServer: {
-    command: 'pnpm dev',
-    url: 'http://127.0.0.1:5173',
-    reuseExistingServer: !process.env.CI,
-    timeout: 30_000,
-  },
+  webServer: process.env.MORPHOLAB_E2E_URL
+    ? undefined
+    : {
+        command: 'pnpm dev',
+        url: 'http://127.0.0.1:5173',
+        reuseExistingServer: !process.env.CI,
+        timeout: 30_000,
+      },
 });

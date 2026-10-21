@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Dataset } from './api';
+import { useModels } from './prediction-api';
 
 export function Arrow({ direction = 'right' }: { direction?: 'right' | 'left' }) {
   return (
@@ -91,14 +92,29 @@ export function SourceDetails({
   );
 }
 export function ModelState() {
+  const models = useModels();
+  const available = models.data?.filter((model) => model.available) ?? [];
+  const trained = available.filter((model) => model.trained);
   return (
     <div className="model-state">
       <span className="eyebrow">MODEL STATUS</span>
       <div className="model-title">
         <span className="hollow-dot" />
-        未训练
+        {models.isPending
+          ? '正在读取模型'
+          : models.error
+            ? '模型状态未取得'
+            : `${available.length} 个可用模型`}
       </div>
-      <p>当前仅浏览真实观测与原注释。模型训练及未来形态评估尚未开展。</p>
+      <p>
+        {models.isPending
+          ? '从本地模型注册表读取，不据页面推断训练状态。'
+          : models.error
+            ? '模型服务暂不可用，请在预测实验面板重试。'
+            : trained.length
+              ? `${trained.length} 个已训练模型；仅加载既有权重进行形态推理。研究结论以公开评估报告为准。`
+              : '当前无可用的已训练模型。经典基线无需训练；可用性由本地注册表确定。'}
+      </p>
     </div>
   );
 }

@@ -1,5 +1,26 @@
 @import 'tailwindcss';
 
+.lead-curve {
+  margin: 14px 0;
+  font-size: 11px;
+}
+.lead-curve svg {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+}
+.lead-curve text {
+  fill: #a6b3b8;
+  font: 10px monospace;
+}
+.lead-curve figcaption {
+  color: #c8d2d4;
+}
+.prediction-curves summary {
+  cursor: pointer;
+  margin-top: 16px;
+}
+
 @theme {
   --color-lab: #8ec5b5;
   --font-sans: Inter, 'Segoe UI', 'Microsoft YaHei', sans-serif;
@@ -1743,5 +1764,259 @@ td:first-child {
     transition: none !important;
     animation: none !important;
     scroll-behavior: auto !important;
+  }
+}
+/* M5: inference remains an explicit workspace tool, separate from frame QC. */
+.prediction-ink {
+  color: #e2b875;
+}
+.inspector-tabs {
+  display: flex;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 12px;
+  gap: 4px;
+}
+.inspector-tabs button {
+  flex: 1;
+  font-size: 12px;
+  padding: 8px 4px;
+  border-color: transparent;
+}
+.inspector-tabs button[aria-pressed='true'] {
+  background: var(--raised);
+  border-color: var(--border);
+}
+.prediction-panel,
+.prediction-metrics {
+  padding: 22px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.prediction-panel h2 {
+  font-size: 18px;
+  margin: 12px 0;
+}
+.panel-note,
+.model-selection-note {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+.prediction-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 20px 0;
+}
+.prediction-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 0;
+}
+.prediction-form select,
+.prediction-form input {
+  min-width: 0;
+  width: 100%;
+  height: 36px;
+  padding: 7px 8px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.prediction-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.text-button {
+  padding: 0;
+  color: var(--accent);
+  border: 0;
+  justify-content: flex-start;
+  font-size: 12px;
+}
+.window-warning,
+.prediction-error {
+  color: var(--warning);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.predict-submit {
+  border-color: #6b5733;
+  color: #e2b875;
+  font-size: 12px;
+}
+.prediction-open {
+  font-size: 12px;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+.job-state {
+  border-left: 2px solid #e2b875;
+  padding: 12px;
+  margin: 16px 0;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12px;
+}
+.job-state code {
+  overflow-wrap: anywhere;
+  font-size: 10px;
+  color: var(--muted);
+}
+.experiment-history {
+  margin-top: 20px;
+}
+.experiment-history summary,
+.prediction-metrics summary {
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--accent);
+}
+.experiment-history summary span {
+  float: right;
+}
+.experiment-history ul {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.experiment-history li button {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 12px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 12px 0;
+  gap: 6px;
+  overflow-wrap: anywhere;
+}
+.experiment-history time,
+.experiment-history .mono {
+  font-size: 10px;
+  color: var(--muted);
+}
+.prediction-metrics h3 {
+  font-size: 16px;
+  margin: 12px 0;
+}
+.prediction-metrics dl {
+  font-size: 11px;
+  margin: 16px 0;
+}
+.prediction-metrics dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.prediction-metrics dd {
+  text-align: right;
+}
+.prediction-metrics .provenance-list > div {
+  flex-direction: column;
+  gap: 4px;
+}
+.provenance-list dd {
+  text-align: left;
+  overflow-wrap: anywhere;
+  font-family: Consolas, monospace;
+  font-size: 10px;
+}
+.prediction-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+.legend-prediction,
+.prediction-line {
+  width: 16px;
+  border-top: 2px dashed #e2b875;
+  background: none;
+}
+.prediction-layer-toggle {
+  margin-top: 16px;
+  font-size: 12px;
+  width: 100%;
+  flex-wrap: wrap;
+  padding: 8px;
+  color: #e2b875;
+}
+.prediction-layer-toggle .mono {
+  font-size: 10px;
+}
+.timeline-window-labels {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 10px;
+  color: var(--accent);
+  font-family: Consolas, monospace;
+}
+.timeline-ranges {
+  position: absolute;
+  top: -5px;
+  left: 2px;
+  right: 2px;
+  height: 4px;
+}
+.timeline-ranges span {
+  position: absolute;
+  height: 3px;
+  min-width: 3px;
+}
+.history-range {
+  background: var(--accent);
+}
+.prediction-range {
+  border-top: 2px dashed #e2b875;
+}
+@media (max-width: 1150px) {
+  .canvas-toolbar .canvas-layer-label {
+    width: auto;
+    margin-right: auto;
+  }
+}
+@media (max-width: 980px) {
+  .inspector {
+    display: block;
+  }
+  .inspector > div:not([hidden]):last-child {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 680px) {
+  .canvas-toolbar {
+    height: auto;
+    min-height: 82px;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .canvas-toolbar .canvas-layer-label {
+    width: calc(100% - 100px);
+  }
+  .prediction-open {
+    margin-left: auto;
+  }
+  .inspector > div:not([hidden]):last-child {
+    display: block;
   }
 }

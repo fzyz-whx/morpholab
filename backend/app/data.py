@@ -34,9 +34,10 @@ class DataError(Exception):
 
 
 class DataStore:
-    def __init__(self, root: Path) -> None:
+    def __init__(self, root: Path, artifacts_root: Path | None = None) -> None:
         self.root = root.resolve()
-        self.archive = self.root / "artifacts/raw/zenodo_7660424/Dataset.zip"
+        self.artifacts = (artifacts_root or self.root / "artifacts").resolve()
+        self.archive = self.artifacts / "raw/zenodo_7660424/Dataset.zip"
         self._verified_fingerprint: tuple[int, int, int] | None = None
         self._cache: OrderedDict[str, tuple[np.ndarray, np.ndarray, float, float]] = OrderedDict()
         self._lock = threading.RLock()
@@ -47,7 +48,11 @@ class DataStore:
     def _json(self, relative: str) -> Any:
         try:
             with self._lock:
-                path = self.root / relative
+                path = (
+                    (self.artifacts / relative.removeprefix("artifacts/"))
+                    if relative.startswith("artifacts/")
+                    else self.root / relative
+                )
                 info = path.stat()
                 fingerprint = (info.st_size, info.st_mtime_ns)
                 cached = self._json_cache.get(relative)
@@ -119,7 +124,7 @@ class DataStore:
         return grouped
 
     def prepared_qc(self) -> dict[str, dict[str, Any]]:
-        if not (self.root / "artifacts/processed/manifest.json").exists():
+        if not (self.artifacts / "processed/manifest.json").exists():
             return {}
         prepared = self._json("artifacts/processed/manifest.json")
         if prepared["source_archive"]["sha256"] != self.summary()["archive_sha256"]:
