@@ -2,7 +2,11 @@
 
 研究真实显微时序中的创面闭合，比较局部神经更新规则与经典动力学、时序网络的预测行为。
 
-**Research prototype · 开发中。** M0已通过：完整校验并解析62条、7,229帧真实创面时序，明确薄轮廓派生形态目标与独立划分协议。官方划分映射仍未知。模型未训练，实验未评估，Web 工作台尚未实现。
+**Research prototype · 开发中。** 已完整校验并解析62条、7,229帧真实创面时序，并可在Web工作台浏览原图、原始薄轮廓和逐帧QC。官方划分映射仍未知，项目采用独立协议。模型未训练，实验未评估。
+
+![MorphoLab真实序列工作台](assets/screenshots/studio-real-sequence.png)
+
+WH01第0帧，1440×900实际浏览器。灰度为真实观测，浅色线为发布者原始薄轮廓；当前没有预测图层。影像来自[Backova等，Zenodo 7660424](https://doi.org/10.5281/zenodo.7660424)，CC BY 4.0；显示进行了对比度映射、放大和轮廓叠加。
 
 ## 研究问题
 
@@ -16,11 +20,22 @@
 |---|---|---|
 | M-1 仓库启动 | 已完成 | 公开仓库、工作协议、Windows / Ubuntu CI 通过 |
 | M0 数据与相关工作审计 | 已通过，限制保留 | 全量解析、来源清单、本地QA、派生目标与独立协议ADR |
-| M1 设计系统与真实数据浏览 | 进行中 | 只读API已验证；界面与桌面尺寸审查进行中 |
+| M1 设计系统与真实数据浏览 | 本机验收通过，CI待核对 | 真实浏览、图层/时间轴/QC、双桌面截图与真实E2E |
 | M2–M4 数据管线、模型与实验 | 未实现 | 未训练、未评估 |
 | M5–M7 软件闭环与发布 | 未实现 | 无可运行 Web 产品 |
 
-此时没有可演示的预测功能。真实运行界面、原创方法图及科研结果图将随对应功能落地逐步加入。
+当前可以浏览数据，没有可演示的模型预测。科研结果图将在真实实验落地后加入。
+
+## 当前可以做什么
+
+- **核查来源与完整性**：下载原始压缩包、核对发布MD5与本地SHA256、审计全部帧与标注，保留数量差异和未知项。
+- **浏览真实实验**：检索62条序列、按本项目划分筛选；原图、原注释和叠加分别可查看。
+- **逐帧检查质量**：键盘、播放、时间轴与缩放均连接实际PNG；失败帧仍保留可见，来源和QC范围同步显示。
+- **复现预处理**：保留全部时间点，严格QC后生成明确标记的派生区域/距离场、固定划分与hash清单。
+
+![真实数据档案](assets/screenshots/archive-v1.png)
+
+实际数据档案；计数来自已审计文件，官方划分未知保持可见。两种桌面尺寸及操作记录见[设计审查](docs/design/reviews/2026-10-21-m1.md)。
 
 ## 方法与证据边界
 
@@ -79,6 +94,28 @@ uv run --locked python scripts/serve.py
 ```
 
 服务位于 `http://127.0.0.1:8765`，[接口说明](docs/architecture/api.md)包括数据来源、序列、逐帧PNG和结构化错误。当前不提供训练或预测作业。健康状态会区分服务启动与真实数据可用；缺下载/审计时给出恢复命令。
+
+另开终端启动工作台（Windows/PowerShell与Linux使用相同命令）：
+
+```sh
+pnpm --dir frontend install --frozen-lockfile
+pnpm --dir frontend dev
+```
+
+打开 `http://127.0.0.1:5173`。图像显示经过转换，原始uint16数据保持本地。无需GPU即可完成上述流程。
+
+前端检查：
+
+```sh
+pnpm --dir frontend lint
+pnpm --dir frontend typecheck
+pnpm --dir frontend test
+pnpm --dir frontend build
+pnpm --dir frontend test:e2e
+pnpm --dir frontend test:e2e:real
+```
+
+`test:e2e`使用标明为synthetic的HTTP fixture；`test:e2e:real`实际要求上述数据和API已就绪，不以mock代替。Windows默认使用本机Edge，Linux/CI先运行 `pnpm --dir frontend exec playwright install chromium` 安装测试浏览器。
 
 公开仓库检查会验证本地文档链接并拦截部分敏感文件模式；它不能替代人工许可和秘密审查。远端同步可运行 `uv run --locked python scripts/verify_remote.py` 实时核对，不以缓存的 origin 状态代替。
 

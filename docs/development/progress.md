@@ -70,3 +70,11 @@
 - 后端27项离线TestClient测试通过；独立启动HTTP进程后实测62序列、7183有效帧、WH01原始轮廓叠加PNG=128×128；此项与ASGI测试分开记录。
 - 新版Starlette提示httpx测试适配弃用，按已安装源码支持切换到httpx2，重跑27项测试通过且无该警告。根pytest已收集backend/tests。
 - UI真实浏览器已开始核验，1280×720默认图像裁切仍在修复；未将M1视觉验收标为通过。
+
+## M1.2 · 真实数据工作台与设计验收 · 2026-10-21
+
+- API提交 [`3cfff8547b8ed3a5786066291decb353fa98ab64`](https://github.com/fzyz-whx/morpholab/commit/3cfff8547b8ed3a5786066291decb353fa98ab64) 已即时push、远端核对，双平台CI成功。
+- 实现React/TypeScript/Tailwind设计系统、来源档案、真实科学画布、图层/时间轴/键鼠/缩放/QC与协议页面；无假模型数据或无效预测按钮。
+- 修复1280图像裁切与较小字号，主代理实看两桌面尺寸更新截图，增强E2E验证完整边界与纵横比、手动滚动和fit复位。负责人已选择沿当前视觉方向继续，优先科研闭环。
+- 7项组件fixture、1项synthetic浏览器回归、3项真实HTTP数据E2E分别通过，lint/format/strict类型/生产构建通过。CI新增前端检查与离线浏览器fixture，不下载真实影像。
+- M1本机验收通过；本提交push后单独核对新增远端前端CI，未预写成功结论。M2正式baseline评估与NCA尚未训练。
