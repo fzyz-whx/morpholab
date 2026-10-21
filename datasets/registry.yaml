@@ -1,0 +1,62 @@
+schema_version: 1
+datasets:
+  - id: drosophila_wound_zenodo_7660424
+    provider: zenodo
+    record_url: https://zenodo.org/records/7660424
+    metadata_url: https://zenodo.org/api/records/7660424
+    doi: 10.5281/zenodo.7660424
+    biology_domain: drosophila_embryo_in_vivo_laser_wound
+    access_status: archive_download_verified_content_audit_pending
+    license: CC-BY-4.0
+    license_evidence: https://zenodo.org/api/records/7660424
+    redistribution_allowed: false
+    redistribution_notes: 'API 为 CC BY 4.0；包内无额外许可附件，完成署名与转换说明前不发布影像样本。'
+    modality: time_lapse_microscopy
+    is_dynamic: true
+    annotation_type: to_be_inspected
+    original_split: reported_44_train_12_validation_5_test_not_yet_inspected
+    source_file: Dataset.zip
+    source_size_bytes: 198715081
+    publisher_checksum: md5:5d1506d67b4be24de0304b58d17361cb
+    observed_sha256: 0f74010ea3eb5820176c1c04a1804928efe23002dde3c2429e1c90defb497e57
+    archive_sequence_file_pairs: 62
+    pixel_size_um: null
+    frame_interval_min: null
+    reported_frame_interval_min: 1
+    citation: 'Backova et al. (2023), Videos of Embryonic Wound Healing in Drosophila and Wound Segmentation, DOI 10.5281/zenodo.7660424'
+    sample_hashes: {}
+    verified_at_utc: null
+    notes: '完整包 MD5 匹配；两目录各62 TIFF，与网页61条不符；划分映射和标签内容继续审计。'
+  - id: in_vitro_wound_gigadb_100118
+    provider: gigadb
+    record_url: https://gigadb.org/dataset/100118
+    doi: 10.5524/100118
+    biology_domain: in_vitro_cell_scratch_mdck_da3
+    access_status: source_links_pending
+    license: CC0-1.0_record_metadata
+    license_evidence: https://api.datacite.org/dois/10.5524/100118
+    redistribution_allowed: false
+    modality: time_lapse_microscopy
+    is_dynamic: true
+    annotation_type: to_be_inspected
+    original_split: null
+    citation: 'Zaritsky et al. (2015), Live time-lapse dataset of in vitro wound healing experiments'
+    sample_hashes: {}
+    verified_at_utc: null
+    notes: 'DataCite记录元数据列CC0 1.0；CIL原图许可仍须逐项核对，原始逐帧访问未验收。'
+  - id: collective_cell_migration_bbbc019v2
+    provider: broad_bbbc
+    record_url: https://bbbc.broadinstitute.org/BBBC019
+    doi: null
+    biology_domain: in_vitro_cell_migration_static_images
+    access_status: webpage_only
+    license: CC-BY-3.0
+    redistribution_allowed: false
+    modality: static_microscopy
+    is_dynamic: false
+    annotation_type: reported_manual_binary_masks_not_downloaded
+    original_split: null
+    citation: 'BBBC019v2, Broad Bioimage Benchmark Collection; see source page for dataset-specific attribution'
+    sample_hashes: {}
+    verified_at_utc: null
+    notes: '171 张静态图像，辅助分割与鲁棒性用途；禁止排列为真实视频。'

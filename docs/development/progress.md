@@ -16,3 +16,10 @@
 - 实现公开文件/本地文档链接检查和实时远端 SHA 核对工具，配置 Windows / Ubuntu 最小权限 CI。
 - 本地 `uv sync --locked --python 3.12`、重点 ruff lint/format、8 项质量工具测试、重点 mypy、公开文件检查均通过；同步工具实时核对首提交通过。
 - 此记录所在提交是本工作单元；后续阶段记录引用其 SHA 与远端 CI 结果，不预写尚未运行的远端结论。
+
+## M0.1 · 可校验公开下载与目录证据 · 2026-10-21
+
+- 前项质量提交 [`4146e6c39b3446c81f5ee19f5d899c84ac6a28b1`](https://github.com/fzyz-whx/morpholab/commit/4146e6c39b3446c81f5ee19f5d899c84ac6a28b1) 已立即 push 并核对；[GitHub Actions](https://github.com/fzyz-whx/morpholab/actions/runs/39587179405) 的 Windows 和 Ubuntu 均成功，M-1 通过。
+- 实现标准库下载器：安全续传、超时/次数/总时间边界、发布MD5与本地SHA256、失败非零与状态留档；只检查ZIP目录，不执行数据内代码。
+- 真实下载198,715,081 bytes，207.796秒，发布MD5匹配。记录62对TIFF与网页61条不一致，没有猜测官方split。
+- 新增下载器13项离线测试；连同此前8项质量工具测试共21项。后续内容审计与训练验收尚未完成。

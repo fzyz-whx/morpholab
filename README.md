@@ -2,7 +2,7 @@
 
 研究真实显微时序中的创面闭合，比较局部神经更新规则与经典动力学、时序网络的预测行为。
 
-**Research prototype · 从零开发中。** 当前正在建立项目规范与公开开发记录，随后核查真实数据。数据尚未通过本地审计，模型未训练，实验未评估，Web 工作台尚未实现。
+**Research prototype · 开发中。** 公开仓库和最小 CI 已建立，真实压缩包完整下载并校验通过；逐帧标签与划分仍在审计。模型未训练，实验未评估，Web 工作台尚未实现。
 
 ## 研究问题
 
@@ -14,8 +14,8 @@
 
 | 阶段 | 当前状态 | 可检查的交付 |
 |---|---|---|
-| M-1 仓库启动 | 进行中 | 公开仓库、项目章程、工作协议、离线质量工具 |
-| M0 数据与相关工作审计 | 待开始 | 下载、校验、标签语义与许可报告 |
+| M-1 仓库启动 | 已完成 | 公开仓库、工作协议、Windows / Ubuntu CI 通过 |
+| M0 数据与相关工作审计 | 进行中 | 下载与 checksum 通过；标签、62/61数量差异与官方划分待核验 |
 | M1 设计系统与真实数据浏览 | 未实现 | 无产品截图 |
 | M2–M4 数据管线、模型与实验 | 未实现 | 未训练、未评估 |
 | M5–M7 软件闭环与发布 | 未实现 | 无可运行 Web 产品 |
@@ -37,12 +37,13 @@ flowchart LR
   E --> F[Web 科研工作台]
 ```
 
-上图表示目标架构，当前仅完成项目启动文档。
+上图表示目标架构，当前已实现项目质量工具与可校验下载器。
 
 ## 从这里开始
 
 - [项目愿景](docs/project/vision.md)：用户、科学问题与不做的范围。
 - [开发路线图](docs/project/roadmap.md)：阶段依赖与验收闸门。
+- [数据审计](docs/research/data-audit.md)：网页描述、实际文件与尚未解决问题。
 - [总任务书 v0.2](docs/project/master-plan-v0.2.md)：完整研发契约。
 - [质量规范](docs/development/quality.md)与 [Git 工作协议](docs/development/git-workflow.md)。
 
@@ -55,11 +56,20 @@ uv run --locked pytest -q tests/test_check_docs.py tests/test_verify_remote.py
 uv run --locked mypy
 ```
 
+下载真实数据（约 199 MB，需要网络；后续自动验证缓存）：
+
+```sh
+uv run --locked python scripts/download_data.py
+uv run --locked pytest -q tests/test_download_data.py
+```
+
+压缩包有 62 对 TIFF，与发布页的 61 条描述不同；下载成功尚不代表数据已适合训练。当前不公开影像，也不从文件名猜测训练/验证划分。
+
 公开仓库检查会验证本地文档链接并拦截部分敏感文件模式；它不能替代人工许可和秘密审查。远端同步可运行 `uv run --locked python scripts/verify_remote.py` 实时核对，不以缓存的 origin 状态代替。
 
 ## 数据、许可与参考
 
-- [Backova 等，Zenodo 7660424](https://doi.org/10.5281/zenodo.7660424)：首选体内创面时序。前期 API 核查标注 CC BY 4.0；压缩包与标签本体仍待本地审计。大型影像不进入 Git。
+- [Backova 等，Zenodo 7660424](https://doi.org/10.5281/zenodo.7660424)：首选体内创面时序，API标注 CC BY 4.0，完整压缩包 MD5 已核对；标签与划分待审计。大型影像不进入 Git。
 - [GigaDB 100118](https://doi.org/10.5524/100118)：不同生物域的体外划痕实验，原始下载与许可待核查，不与果蝇指标混为一组。
 - [BBBC019](https://bbbc.broadinstitute.org/BBBC019)：静态图像辅助资源，不拼成伪造视频。
 - [Growing Neural Cellular Automata](https://distill.pub/2020/growing-ca/)，2020：局部规则、生长与再生的既有工作。
