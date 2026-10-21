@@ -48,6 +48,7 @@ flowchart LR
 - [数据审计](docs/research/data-audit.md)：网页描述、实际文件与尚未解决问题。
 - [相邻工作](docs/research/related-work.md)与[候选假设](docs/research/hypotheses.md)：已有成果、重复风险及可证伪问题。
 - [数据契约](docs/architecture/data-contract.md)：来源、连续性、分组、编码文件 hash 与路径边界。
+- [可复现管线](docs/architecture/data-pipeline.md)：不压缩时间的QC、派生区域/距离场与冻结清单。
 - [总任务书 v0.2](docs/project/master-plan-v0.2.md)：完整研发契约。
 - [质量规范](docs/development/quality.md)与 [Git 工作协议](docs/development/git-workflow.md)。
 
@@ -65,10 +66,11 @@ uv run --locked mypy
 ```sh
 uv run --locked python scripts/download_data.py
 uv run --locked python scripts/audit_data.py
+uv run --locked python scripts/prepare_data.py
 uv run --locked pytest -q tests/test_download_data.py
 ```
 
-压缩包有62对TIFF，与发布页61条描述不同。审计会生成逐帧清单、两条各六帧样本与本地轮廓叠加QA；45帧不满足严格闭曲线且不触边的规则。原图不进入Git，官方划分未知，未开始训练。
+压缩包有62对TIFF，与发布页61条描述不同。审计生成逐帧清单、两条各六帧样本与本地叠加QA；预处理保留所有时间点，其中7,183帧通过64网格QC，46帧标为无效。原图不进入Git，官方划分未知，未开始训练。
 
 公开仓库检查会验证本地文档链接并拦截部分敏感文件模式；它不能替代人工许可和秘密审查。远端同步可运行 `uv run --locked python scripts/verify_remote.py` 实时核对，不以缓存的 origin 状态代替。
 
