@@ -1,62 +1,109 @@
 schema_version: 1
 datasets:
-  - id: drosophila_wound_zenodo_7660424
-    provider: zenodo
-    record_url: https://zenodo.org/records/7660424
-    metadata_url: https://zenodo.org/api/records/7660424
-    doi: 10.5281/zenodo.7660424
-    biology_domain: drosophila_embryo_in_vivo_laser_wound
-    access_status: archive_download_verified_content_audit_pending
-    license: CC-BY-4.0
-    license_evidence: https://zenodo.org/api/records/7660424
-    redistribution_allowed: false
-    redistribution_notes: 'API 为 CC BY 4.0；包内无额外许可附件，完成署名与转换说明前不发布影像样本。'
-    modality: time_lapse_microscopy
-    is_dynamic: true
-    annotation_type: to_be_inspected
-    original_split: reported_44_train_12_validation_5_test_not_yet_inspected
-    source_file: Dataset.zip
-    source_size_bytes: 198715081
-    publisher_checksum: md5:5d1506d67b4be24de0304b58d17361cb
-    observed_sha256: 0f74010ea3eb5820176c1c04a1804928efe23002dde3c2429e1c90defb497e57
-    archive_sequence_file_pairs: 62
-    pixel_size_um: null
-    frame_interval_min: null
-    reported_frame_interval_min: 1
-    citation: 'Backova et al. (2023), Videos of Embryonic Wound Healing in Drosophila and Wound Segmentation, DOI 10.5281/zenodo.7660424'
-    sample_hashes: {}
-    verified_at_utc: null
-    notes: '完整包 MD5 匹配；两目录各62 TIFF，与网页61条不符；划分映射和标签内容继续审计。'
-  - id: in_vitro_wound_gigadb_100118
-    provider: gigadb
-    record_url: https://gigadb.org/dataset/100118
-    doi: 10.5524/100118
-    biology_domain: in_vitro_cell_scratch_mdck_da3
-    access_status: source_links_pending
-    license: CC0-1.0_record_metadata
-    license_evidence: https://api.datacite.org/dois/10.5524/100118
-    redistribution_allowed: false
-    modality: time_lapse_microscopy
-    is_dynamic: true
-    annotation_type: to_be_inspected
-    original_split: null
-    citation: 'Zaritsky et al. (2015), Live time-lapse dataset of in vitro wound healing experiments'
-    sample_hashes: {}
-    verified_at_utc: null
-    notes: 'DataCite记录元数据列CC0 1.0；CIL原图许可仍须逐项核对，原始逐帧访问未验收。'
-  - id: collective_cell_migration_bbbc019v2
-    provider: broad_bbbc
-    record_url: https://bbbc.broadinstitute.org/BBBC019
-    doi: null
-    biology_domain: in_vitro_cell_migration_static_images
-    access_status: webpage_only
-    license: CC-BY-3.0
-    redistribution_allowed: false
-    modality: static_microscopy
-    is_dynamic: false
-    annotation_type: reported_manual_binary_masks_not_downloaded
-    original_split: null
-    citation: 'BBBC019v2, Broad Bioimage Benchmark Collection; see source page for dataset-specific attribution'
-    sample_hashes: {}
-    verified_at_utc: null
-    notes: '171 张静态图像，辅助分割与鲁棒性用途；禁止排列为真实视频。'
+- id: drosophila_wound_zenodo_7660424
+  provider: zenodo
+  record_url: https://zenodo.org/records/7660424
+  metadata_url: https://zenodo.org/api/records/7660424
+  doi: 10.5281/zenodo.7660424
+  biology_domain: drosophila_embryo_in_vivo_laser_wound
+  access_status: content_audit_verified_protocol_pending
+  license: CC-BY-4.0
+  license_evidence: https://zenodo.org/api/records/7660424
+  redistribution_allowed: true
+  redistribution_notes: Official API CC BY 4.0; archive contains no conflicting attachment.
+    Attribution and modification statements required. Source images remain excluded
+    from Git.
+  modality: time_lapse_microscopy
+  is_dynamic: true
+  annotation_type: skeletonized_wound_boundary
+  original_split: unavailable_file_level_mapping
+  source_file: Dataset.zip
+  source_size_bytes: 198715081
+  publisher_checksum: md5:5d1506d67b4be24de0304b58d17361cb
+  observed_sha256: 0f74010ea3eb5820176c1c04a1804928efe23002dde3c2429e1c90defb497e57
+  archive_sequence_file_pairs: 62
+  pixel_size_um: null
+  frame_interval_min: null
+  reported_frame_interval_min: 1
+  citation: Backova et al. (2023), Videos of Embryonic Wound Healing in Drosophila
+    and Wound Segmentation, DOI 10.5281/zenodo.7660424
+  sample_hashes:
+    WH01/0:
+      image_png_sha256: 1b71eb579cdd002020d2a9517967e80f41f8deb24474b7d2e7aec5e1fa29f14f
+      annotation_png_sha256: fe6c281436d13681b12b5f9e851b47356bd6fd2be08e03d242e26364bd920020
+    WH01/1:
+      image_png_sha256: 0539c097b6275069b4ba7d263aa85c3ba69ec03e06f5ec4383e8628cd236aa3b
+      annotation_png_sha256: 18c70d48cad46bf9db40b93a94912a15bdc0c19922676bf015e2c4ac5c925f2b
+    WH01/2:
+      image_png_sha256: bfcca56273521a2f4fd76b81891b8f7782bce4aab5fbf6303a3bb5426055a2d0
+      annotation_png_sha256: 818f16a5b925262e7db7f22242698bcfa84358cc8b238cf6c6c4d8ae6eede7a9
+    WH01/3:
+      image_png_sha256: 3037095ff612cb3b9f27014ed8a6a465873f60a3ec43c1a830510654eb46f632
+      annotation_png_sha256: f1ab12755385ff51c216ae1dea05e53c7d52dd901af66ad4aeb91a9b625e8bd6
+    WH01/4:
+      image_png_sha256: c138ebb15c01f9443c02abfa81f6d10a61cde4f49588b50c4aa74327f4fd9fb4
+      annotation_png_sha256: dc6a86553a979bba70fd287edecce5a247f1dc5c7f7696702d6d9d5e6c370cc1
+    WH01/5:
+      image_png_sha256: 5ae2606ffb369a52c057ea36f6c5c9bb503f76e0d476728640a43d1e05f16c65
+      annotation_png_sha256: 4eb1e205d00b55feb6004b4f00e53e0d9e7930da5bf894ba649bb9a22017d2ae
+    WHu01/0:
+      image_png_sha256: 97b8ddc2bf5fbced7cdc4d46750f2d947582d98964125c8ed2e0d294054ae1eb
+      annotation_png_sha256: f33f08d4ae7e0e574d14180fb85db45009df498746ca9ed32470c1df14351e48
+    WHu01/1:
+      image_png_sha256: 2b59f337a5f6ad155d3c192612a3bdd6712617d16c5f109f747ed28d24191a55
+      annotation_png_sha256: ae92c1a6109b705a2db512e4f56b52b6fb3db765085650b0f21f4fa7d6f60113
+    WHu01/2:
+      image_png_sha256: c8e94403f5ed0bfc8fe6da55bf69ea3ac0012268458b01eb1709f0337ecc036a
+      annotation_png_sha256: f5ea7651f4665e3b54ace63d6a5169648a4df1a4c251c4ee7f1d073d614133fc
+    WHu01/3:
+      image_png_sha256: aa075496a9dbf276f6cc5fc590519f0b7b4e7a1284c488e03d152b16bcfbd0ff
+      annotation_png_sha256: 44527eb6f2b7920c4fea10a39b6ec99d1d937b320300e695ab24abf526840d49
+    WHu01/4:
+      image_png_sha256: 7250b5e946796aa6d1e35e346c3f400be3e00ce6761158ca4aa09f0015a0c515
+      annotation_png_sha256: 701cffe1db2961420f91f33f80ab165594475168832f7225443164a969943004
+    WHu01/5:
+      image_png_sha256: b05c491f9b0a852e199a550119e436a6d46211ed59e53c685c2a9dbca363f124
+      annotation_png_sha256: 40b4721d094b59e40d1e5c48988fdb8809450c1ec0e2fe799ed19b000aff1c5a
+  verified_at_utc: '2026-10-21T10:59:00.019840+00:00'
+  notes: 完整包 MD5 匹配；两目录各62 TIFF，与网页61条不符；划分映射和标签内容继续审计。
+  sequence_count: 62
+  frame_count: 7229
+  frame_size:
+  - 128
+  - 128
+  image_dtype: uint16
+- id: in_vitro_wound_gigadb_100118
+  provider: gigadb
+  record_url: https://gigadb.org/dataset/100118
+  doi: 10.5524/100118
+  biology_domain: in_vitro_cell_scratch_mdck_da3
+  access_status: source_links_pending
+  license: CC0-1.0_record_metadata
+  license_evidence: https://api.datacite.org/dois/10.5524/100118
+  redistribution_allowed: false
+  modality: time_lapse_microscopy
+  is_dynamic: true
+  annotation_type: to_be_inspected
+  original_split: null
+  citation: Zaritsky et al. (2015), Live time-lapse dataset of in vitro wound healing
+    experiments
+  sample_hashes: {}
+  verified_at_utc: null
+  notes: DataCite记录元数据列CC0 1.0；CIL原图许可仍须逐项核对，原始逐帧访问未验收。
+- id: collective_cell_migration_bbbc019v2
+  provider: broad_bbbc
+  record_url: https://bbbc.broadinstitute.org/BBBC019
+  doi: null
+  biology_domain: in_vitro_cell_migration_static_images
+  access_status: webpage_only
+  license: CC-BY-3.0
+  redistribution_allowed: false
+  modality: static_microscopy
+  is_dynamic: false
+  annotation_type: reported_manual_binary_masks_not_downloaded
+  original_split: null
+  citation: BBBC019v2, Broad Bioimage Benchmark Collection; see source page for dataset-specific
+    attribution
+  sample_hashes: {}
+  verified_at_utc: null
+  notes: 171 张静态图像，辅助分割与鲁棒性用途；禁止排列为真实视频。

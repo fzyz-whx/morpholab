@@ -1,0 +1,3042 @@
+{
+  "schema_version": "0.1",
+  "source_id": "zenodo:7660424",
+  "archive_sha256": "0f74010ea3eb5820176c1c04a1804928efe23002dde3c2429e1c90defb497e57",
+  "matches_known_download_sha256": true,
+  "archive_member_count": 126,
+  "archive_file_member_count": 124,
+  "archive_uncompressed_bytes": 358798034,
+  "unexpected_members": [],
+  "sequence_count": 62,
+  "parsed_sequence_count": 62,
+  "frame_pair_count": 7229,
+  "split_status": "unknown; no author-provided split mapping located in this archive",
+  "time_semantics": {
+    "index": "zero-based original TIFF slice order, explicitly interpreted as time",
+    "reported_frame_interval_seconds": 60,
+    "reported_interval_evidence": "source webpage; encoded per-frame timestamps unverified",
+    "verified_physical_interval_seconds": null,
+    "caution": "ImageJ axis metadata may encode channel/depth; it does not establish time"
+  },
+  "annotation_semantics": "thin wound contours; original skeletonized labels; see ADR for derived region QC",
+  "metric_definitions": {
+    "normalization": "0 background; original 1 or 255 foreground; source bytes retained",
+    "connectivity": "foreground 8-neighbor; fill/holes background 4-neighbor",
+    "endpoints": "foreground pixels with exactly one foreground 8-neighbor",
+    "branch_pixels": "foreground pixels with >=3 foreground 8-neighbors; not skeletonized",
+    "filled_area": "scipy.ndimage.binary_fill_holes area; derived QC, not ground truth",
+    "closed_curve_candidate": "one component, no endpoints/branches, one enclosed hole",
+    "hashes": "SHA256 of C-order source pixel bytes; shape/dtype required for comparison"
+  },
+  "totals": {
+    "empty_annotation": 0,
+    "touches_border": 26,
+    "single_closed_curve_candidate": 7210,
+    "strict_closed_nonborder": 7184
+  },
+  "sequences": [
+    {
+      "sequence_id": "Test01",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": "candidate_test",
+      "image_member": "Videos/Test01.tif",
+      "annotation_member": "Segmentations/Test01.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        110,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        110,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "QYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        1
+      ],
+      "frame_count": 110,
+      "first_time_index": 0,
+      "last_time_index": 109,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 110,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        23,
+        259
+      ],
+      "filled_area_range_derived": [
+        52,
+        4003
+      ]
+    },
+    {
+      "sequence_id": "Test02",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": "candidate_test",
+      "image_member": "Videos/Test02.tif",
+      "annotation_member": "Segmentations/Test02.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        102,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        102,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "QYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        1
+      ],
+      "frame_count": 102,
+      "first_time_index": 0,
+      "last_time_index": 101,
+      "empty_frame_count": 0,
+      "border_frame_count": 3,
+      "closed_curve_candidate_count": 100,
+      "endpoint_frame_count": 2,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 2,
+      "annotation_pixels_range": [
+        16,
+        262
+      ],
+      "filled_area_range_derived": [
+        28,
+        3753
+      ]
+    },
+    {
+      "sequence_id": "Test03",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": "candidate_test",
+      "image_member": "Videos/Test03.tif",
+      "annotation_member": "Segmentations/Test03.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        93,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        93,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "QYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        1
+      ],
+      "frame_count": 93,
+      "first_time_index": 0,
+      "last_time_index": 92,
+      "empty_frame_count": 0,
+      "border_frame_count": 9,
+      "closed_curve_candidate_count": 93,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        46,
+        273
+      ],
+      "filled_area_range_derived": [
+        205,
+        4159
+      ]
+    },
+    {
+      "sequence_id": "Test04",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": "candidate_test",
+      "image_member": "Videos/Test04.tif",
+      "annotation_member": "Segmentations/Test04.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        67,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        67,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "QYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        1
+      ],
+      "frame_count": 67,
+      "first_time_index": 0,
+      "last_time_index": 66,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 67,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        4,
+        185
+      ],
+      "filled_area_range_derived": [
+        5,
+        2840
+      ]
+    },
+    {
+      "sequence_id": "Test05",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": "candidate_test",
+      "image_member": "Videos/Test05.tif",
+      "annotation_member": "Segmentations/Test05.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        83,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        83,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "QYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        1
+      ],
+      "frame_count": 83,
+      "first_time_index": 0,
+      "last_time_index": 82,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 83,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        16,
+        224
+      ],
+      "filled_area_range_derived": [
+        31,
+        4065
+      ]
+    },
+    {
+      "sequence_id": "WH01",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH01.tif",
+      "annotation_member": "Segmentations/WH01.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        122,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        122,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 122,
+      "first_time_index": 0,
+      "last_time_index": 121,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 122,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        16,
+        186
+      ],
+      "filled_area_range_derived": [
+        33,
+        3001
+      ]
+    },
+    {
+      "sequence_id": "WH02",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH02.tif",
+      "annotation_member": "Segmentations/WH02.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        121,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        121,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 121,
+      "first_time_index": 0,
+      "last_time_index": 120,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 121,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        10,
+        199
+      ],
+      "filled_area_range_derived": [
+        17,
+        2994
+      ]
+    },
+    {
+      "sequence_id": "WH03",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH03.tif",
+      "annotation_member": "Segmentations/WH03.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        121,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        121,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 121,
+      "first_time_index": 0,
+      "last_time_index": 120,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 121,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        22,
+        278
+      ],
+      "filled_area_range_derived": [
+        51,
+        4989
+      ]
+    },
+    {
+      "sequence_id": "WH04",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH04.tif",
+      "annotation_member": "Segmentations/WH04.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        182,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        182,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 182,
+      "first_time_index": 0,
+      "last_time_index": 181,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 182,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        25,
+        336
+      ],
+      "filled_area_range_derived": [
+        69,
+        6152
+      ]
+    },
+    {
+      "sequence_id": "WH05",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH05.tif",
+      "annotation_member": "Segmentations/WH05.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        165,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        165,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 165,
+      "first_time_index": 0,
+      "last_time_index": 164,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 165,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        31,
+        263
+      ],
+      "filled_area_range_derived": [
+        105,
+        3981
+      ]
+    },
+    {
+      "sequence_id": "WH06",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH06.tif",
+      "annotation_member": "Segmentations/WH06.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        149,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        149,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 149,
+      "first_time_index": 0,
+      "last_time_index": 148,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 147,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 2,
+      "annotation_pixels_range": [
+        37,
+        349
+      ],
+      "filled_area_range_derived": [
+        108,
+        5287
+      ]
+    },
+    {
+      "sequence_id": "WH07",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH07.tif",
+      "annotation_member": "Segmentations/WH07.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        126,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        126,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 126,
+      "first_time_index": 0,
+      "last_time_index": 125,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 126,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        14,
+        262
+      ],
+      "filled_area_range_derived": [
+        28,
+        3546
+      ]
+    },
+    {
+      "sequence_id": "WH08",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH08.tif",
+      "annotation_member": "Segmentations/WH08.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        149,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        149,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 149,
+      "first_time_index": 0,
+      "last_time_index": 148,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 148,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 1,
+      "annotation_pixels_range": [
+        23,
+        210
+      ],
+      "filled_area_range_derived": [
+        63,
+        2548
+      ]
+    },
+    {
+      "sequence_id": "WH09",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH09.tif",
+      "annotation_member": "Segmentations/WH09.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        140,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        140,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 140,
+      "first_time_index": 0,
+      "last_time_index": 139,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 140,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        14,
+        197
+      ],
+      "filled_area_range_derived": [
+        30,
+        2827
+      ]
+    },
+    {
+      "sequence_id": "WH10",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH10.tif",
+      "annotation_member": "Segmentations/WH10.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        121,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        121,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 121,
+      "first_time_index": 0,
+      "last_time_index": 120,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 121,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        6,
+        120
+      ],
+      "filled_area_range_derived": [
+        8,
+        922
+      ]
+    },
+    {
+      "sequence_id": "WH11",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH11.tif",
+      "annotation_member": "Segmentations/WH11.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        148,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        148,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 148,
+      "first_time_index": 0,
+      "last_time_index": 147,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 148,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        25,
+        249
+      ],
+      "filled_area_range_derived": [
+        57,
+        3502
+      ]
+    },
+    {
+      "sequence_id": "WH12",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH12.tif",
+      "annotation_member": "Segmentations/WH12.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        147,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        147,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 147,
+      "first_time_index": 0,
+      "last_time_index": 146,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 147,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        11,
+        241
+      ],
+      "filled_area_range_derived": [
+        20,
+        3119
+      ]
+    },
+    {
+      "sequence_id": "WH13",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH13.tif",
+      "annotation_member": "Segmentations/WH13.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        153,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        153,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 153,
+      "first_time_index": 0,
+      "last_time_index": 152,
+      "empty_frame_count": 0,
+      "border_frame_count": 1,
+      "closed_curve_candidate_count": 153,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        12,
+        271
+      ],
+      "filled_area_range_derived": [
+        24,
+        5199
+      ]
+    },
+    {
+      "sequence_id": "WH14",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH14.tif",
+      "annotation_member": "Segmentations/WH14.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        106,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        106,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 106,
+      "first_time_index": 0,
+      "last_time_index": 105,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 105,
+      "endpoint_frame_count": 1,
+      "multiple_component_frame_count": 1,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        15,
+        226
+      ],
+      "filled_area_range_derived": [
+        33,
+        3917
+      ]
+    },
+    {
+      "sequence_id": "WH15",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH15.tif",
+      "annotation_member": "Segmentations/WH15.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        174,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        174,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 174,
+      "first_time_index": 0,
+      "last_time_index": 173,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 174,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        6,
+        267
+      ],
+      "filled_area_range_derived": [
+        8,
+        5680
+      ]
+    },
+    {
+      "sequence_id": "WH16",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH16.tif",
+      "annotation_member": "Segmentations/WH16.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        82,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        82,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 82,
+      "first_time_index": 0,
+      "last_time_index": 81,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 81,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 1,
+      "annotation_pixels_range": [
+        17,
+        199
+      ],
+      "filled_area_range_derived": [
+        40,
+        3111
+      ]
+    },
+    {
+      "sequence_id": "WH17",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH17.tif",
+      "annotation_member": "Segmentations/WH17.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        86,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        86,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 86,
+      "first_time_index": 0,
+      "last_time_index": 85,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 83,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 3,
+      "annotation_pixels_range": [
+        20,
+        301
+      ],
+      "filled_area_range_derived": [
+        50,
+        4612
+      ]
+    },
+    {
+      "sequence_id": "WH18",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH18.tif",
+      "annotation_member": "Segmentations/WH18.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        107,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        107,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 107,
+      "first_time_index": 0,
+      "last_time_index": 106,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 107,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        27,
+        180
+      ],
+      "filled_area_range_derived": [
+        80,
+        2604
+      ]
+    },
+    {
+      "sequence_id": "WH19",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH19.tif",
+      "annotation_member": "Segmentations/WH19.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        122,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        122,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 122,
+      "first_time_index": 0,
+      "last_time_index": 121,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 122,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        22,
+        133
+      ],
+      "filled_area_range_derived": [
+        61,
+        1220
+      ]
+    },
+    {
+      "sequence_id": "WH20",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH20.tif",
+      "annotation_member": "Segmentations/WH20.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        122,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        122,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 122,
+      "first_time_index": 0,
+      "last_time_index": 121,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 122,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        27,
+        196
+      ],
+      "filled_area_range_derived": [
+        70,
+        2894
+      ]
+    },
+    {
+      "sequence_id": "WH21",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH21.tif",
+      "annotation_member": "Segmentations/WH21.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        160,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        160,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 160,
+      "first_time_index": 0,
+      "last_time_index": 159,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 160,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        13,
+        236
+      ],
+      "filled_area_range_derived": [
+        25,
+        3098
+      ]
+    },
+    {
+      "sequence_id": "WH22",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH22.tif",
+      "annotation_member": "Segmentations/WH22.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        205,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        205,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 205,
+      "first_time_index": 0,
+      "last_time_index": 204,
+      "empty_frame_count": 0,
+      "border_frame_count": 1,
+      "closed_curve_candidate_count": 205,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        35,
+        272
+      ],
+      "filled_area_range_derived": [
+        142,
+        5599
+      ]
+    },
+    {
+      "sequence_id": "WH23",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH23.tif",
+      "annotation_member": "Segmentations/WH23.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        81,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        81,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 81,
+      "first_time_index": 0,
+      "last_time_index": 80,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 81,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        39,
+        204
+      ],
+      "filled_area_range_derived": [
+        117,
+        1955
+      ]
+    },
+    {
+      "sequence_id": "WH24",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH24.tif",
+      "annotation_member": "Segmentations/WH24.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        62,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        62,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 62,
+      "first_time_index": 0,
+      "last_time_index": 61,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 62,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        15,
+        276
+      ],
+      "filled_area_range_derived": [
+        30,
+        4864
+      ]
+    },
+    {
+      "sequence_id": "WH25",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH25.tif",
+      "annotation_member": "Segmentations/WH25.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        102,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        102,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 102,
+      "first_time_index": 0,
+      "last_time_index": 101,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 102,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        13,
+        261
+      ],
+      "filled_area_range_derived": [
+        26,
+        5649
+      ]
+    },
+    {
+      "sequence_id": "WH26",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH26.tif",
+      "annotation_member": "Segmentations/WH26.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        123,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        123,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 123,
+      "first_time_index": 0,
+      "last_time_index": 122,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 123,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        14,
+        267
+      ],
+      "filled_area_range_derived": [
+        28,
+        5661
+      ]
+    },
+    {
+      "sequence_id": "WH27",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH27.tif",
+      "annotation_member": "Segmentations/WH27.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        62,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        62,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 62,
+      "first_time_index": 0,
+      "last_time_index": 61,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 62,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        12,
+        244
+      ],
+      "filled_area_range_derived": [
+        22,
+        4759
+      ]
+    },
+    {
+      "sequence_id": "WH28",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH28.tif",
+      "annotation_member": "Segmentations/WH28.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        103,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        103,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 103,
+      "first_time_index": 0,
+      "last_time_index": 102,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 103,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        11,
+        260
+      ],
+      "filled_area_range_derived": [
+        19,
+        4361
+      ]
+    },
+    {
+      "sequence_id": "WH29",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH29.tif",
+      "annotation_member": "Segmentations/WH29.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        62,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        62,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 62,
+      "first_time_index": 0,
+      "last_time_index": 61,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 62,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        11,
+        185
+      ],
+      "filled_area_range_derived": [
+        19,
+        2539
+      ]
+    },
+    {
+      "sequence_id": "WH30",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH30.tif",
+      "annotation_member": "Segmentations/WH30.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        101,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        101,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 101,
+      "first_time_index": 0,
+      "last_time_index": 100,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 100,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 1,
+      "annotation_pixels_range": [
+        12,
+        231
+      ],
+      "filled_area_range_derived": [
+        22,
+        3710
+      ]
+    },
+    {
+      "sequence_id": "WH31",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH31.tif",
+      "annotation_member": "Segmentations/WH31.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        83,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        83,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 83,
+      "first_time_index": 0,
+      "last_time_index": 82,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 83,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        16,
+        213
+      ],
+      "filled_area_range_derived": [
+        37,
+        3339
+      ]
+    },
+    {
+      "sequence_id": "WH32",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH32.tif",
+      "annotation_member": "Segmentations/WH32.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        62,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        62,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 62,
+      "first_time_index": 0,
+      "last_time_index": 61,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 62,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        9,
+        210
+      ],
+      "filled_area_range_derived": [
+        14,
+        3358
+      ]
+    },
+    {
+      "sequence_id": "WH33",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH33.tif",
+      "annotation_member": "Segmentations/WH33.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        42,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        42,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 42,
+      "first_time_index": 0,
+      "last_time_index": 41,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 42,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        20,
+        192
+      ],
+      "filled_area_range_derived": [
+        51,
+        2860
+      ]
+    },
+    {
+      "sequence_id": "WH34",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH34.tif",
+      "annotation_member": "Segmentations/WH34.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        140,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        140,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 140,
+      "first_time_index": 0,
+      "last_time_index": 139,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 140,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        15,
+        277
+      ],
+      "filled_area_range_derived": [
+        34,
+        4277
+      ]
+    },
+    {
+      "sequence_id": "WH35",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WH35.tif",
+      "annotation_member": "Segmentations/WH35.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        81,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        81,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 81,
+      "first_time_index": 0,
+      "last_time_index": 80,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 81,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        8,
+        203
+      ],
+      "filled_area_range_derived": [
+        12,
+        3334
+      ]
+    },
+    {
+      "sequence_id": "WHu01",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu01.tif",
+      "annotation_member": "Segmentations/WHu01.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        64,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        64,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 64,
+      "first_time_index": 0,
+      "last_time_index": 63,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 64,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        165,
+        291
+      ],
+      "filled_area_range_derived": [
+        2177,
+        4477
+      ]
+    },
+    {
+      "sequence_id": "WHu02",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu02.tif",
+      "annotation_member": "Segmentations/WHu02.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        82,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        82,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 82,
+      "first_time_index": 0,
+      "last_time_index": 81,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 81,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 1,
+      "annotation_pixels_range": [
+        109,
+        264
+      ],
+      "filled_area_range_derived": [
+        1114,
+        4733
+      ]
+    },
+    {
+      "sequence_id": "WHu03",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu03.tif",
+      "annotation_member": "Segmentations/WHu03.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        76,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        76,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 76,
+      "first_time_index": 0,
+      "last_time_index": 75,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 76,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        10,
+        237
+      ],
+      "filled_area_range_derived": [
+        16,
+        3226
+      ]
+    },
+    {
+      "sequence_id": "WHu04",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu04.tif",
+      "annotation_member": "Segmentations/WHu04.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        32,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        32,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 32,
+      "first_time_index": 0,
+      "last_time_index": 31,
+      "empty_frame_count": 0,
+      "border_frame_count": 1,
+      "closed_curve_candidate_count": 32,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        213,
+        291
+      ],
+      "filled_area_range_derived": [
+        3487,
+        5870
+      ]
+    },
+    {
+      "sequence_id": "WHu05",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu05.tif",
+      "annotation_member": "Segmentations/WHu05.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        148,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        148,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 148,
+      "first_time_index": 0,
+      "last_time_index": 147,
+      "empty_frame_count": 0,
+      "border_frame_count": 2,
+      "closed_curve_candidate_count": 148,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        10,
+        257
+      ],
+      "filled_area_range_derived": [
+        17,
+        3157
+      ]
+    },
+    {
+      "sequence_id": "WHu06",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu06.tif",
+      "annotation_member": "Segmentations/WHu06.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        95,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        95,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 95,
+      "first_time_index": 0,
+      "last_time_index": 94,
+      "empty_frame_count": 0,
+      "border_frame_count": 2,
+      "closed_curve_candidate_count": 94,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 1,
+      "annotation_pixels_range": [
+        18,
+        304
+      ],
+      "filled_area_range_derived": [
+        42,
+        4663
+      ]
+    },
+    {
+      "sequence_id": "WHu07",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu07.tif",
+      "annotation_member": "Segmentations/WHu07.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        159,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        159,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 159,
+      "first_time_index": 0,
+      "last_time_index": 158,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 158,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 1,
+      "annotation_pixels_range": [
+        4,
+        308
+      ],
+      "filled_area_range_derived": [
+        5,
+        6637
+      ]
+    },
+    {
+      "sequence_id": "WHu08",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu08.tif",
+      "annotation_member": "Segmentations/WHu08.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        198,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        198,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 198,
+      "first_time_index": 0,
+      "last_time_index": 197,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 198,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        52,
+        276
+      ],
+      "filled_area_range_derived": [
+        286,
+        5459
+      ]
+    },
+    {
+      "sequence_id": "WHu09",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu09.tif",
+      "annotation_member": "Segmentations/WHu09.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        70,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        70,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 70,
+      "first_time_index": 0,
+      "last_time_index": 69,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 70,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        9,
+        265
+      ],
+      "filled_area_range_derived": [
+        14,
+        4891
+      ]
+    },
+    {
+      "sequence_id": "WHu10",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu10.tif",
+      "annotation_member": "Segmentations/WHu10.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        81,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        81,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 81,
+      "first_time_index": 0,
+      "last_time_index": 80,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 81,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        81,
+        241
+      ],
+      "filled_area_range_derived": [
+        550,
+        3512
+      ]
+    },
+    {
+      "sequence_id": "WHu11",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu11.tif",
+      "annotation_member": "Segmentations/WHu11.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        80,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        80,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 80,
+      "first_time_index": 0,
+      "last_time_index": 79,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 80,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        16,
+        247
+      ],
+      "filled_area_range_derived": [
+        32,
+        4385
+      ]
+    },
+    {
+      "sequence_id": "WHu12",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu12.tif",
+      "annotation_member": "Segmentations/WHu12.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        109,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        109,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 109,
+      "first_time_index": 0,
+      "last_time_index": 108,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 108,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 1,
+      "annotation_pixels_range": [
+        27,
+        264
+      ],
+      "filled_area_range_derived": [
+        64,
+        4469
+      ]
+    },
+    {
+      "sequence_id": "WHu13",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu13.tif",
+      "annotation_member": "Segmentations/WHu13.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        222,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        222,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 222,
+      "first_time_index": 0,
+      "last_time_index": 221,
+      "empty_frame_count": 0,
+      "border_frame_count": 2,
+      "closed_curve_candidate_count": 221,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 1,
+      "annotation_pixels_range": [
+        35,
+        395
+      ],
+      "filled_area_range_derived": [
+        132,
+        6314
+      ]
+    },
+    {
+      "sequence_id": "WHu14",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu14.tif",
+      "annotation_member": "Segmentations/WHu14.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        199,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        199,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 199,
+      "first_time_index": 0,
+      "last_time_index": 198,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 199,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        33,
+        270
+      ],
+      "filled_area_range_derived": [
+        128,
+        5128
+      ]
+    },
+    {
+      "sequence_id": "WHu15",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu15.tif",
+      "annotation_member": "Segmentations/WHu15.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        76,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        76,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 76,
+      "first_time_index": 0,
+      "last_time_index": 75,
+      "empty_frame_count": 0,
+      "border_frame_count": 2,
+      "closed_curve_candidate_count": 76,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        15,
+        264
+      ],
+      "filled_area_range_derived": [
+        29,
+        3230
+      ]
+    },
+    {
+      "sequence_id": "WHu16",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu16.tif",
+      "annotation_member": "Segmentations/WHu16.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        138,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        138,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 138,
+      "first_time_index": 0,
+      "last_time_index": 137,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 138,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        13,
+        292
+      ],
+      "filled_area_range_derived": [
+        26,
+        6668
+      ]
+    },
+    {
+      "sequence_id": "WHu17",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu17.tif",
+      "annotation_member": "Segmentations/WHu17.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        142,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        142,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 142,
+      "first_time_index": 0,
+      "last_time_index": 141,
+      "empty_frame_count": 0,
+      "border_frame_count": 2,
+      "closed_curve_candidate_count": 142,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        8,
+        280
+      ],
+      "filled_area_range_derived": [
+        12,
+        6503
+      ]
+    },
+    {
+      "sequence_id": "WHu18",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu18.tif",
+      "annotation_member": "Segmentations/WHu18.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        95,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        95,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 95,
+      "first_time_index": 0,
+      "last_time_index": 94,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 94,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 1,
+      "annotation_pixels_range": [
+        12,
+        262
+      ],
+      "filled_area_range_derived": [
+        20,
+        3527
+      ]
+    },
+    {
+      "sequence_id": "WHu19",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu19.tif",
+      "annotation_member": "Segmentations/WHu19.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        82,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        82,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 82,
+      "first_time_index": 0,
+      "last_time_index": 81,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 82,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        94,
+        282
+      ],
+      "filled_area_range_derived": [
+        832,
+        5774
+      ]
+    },
+    {
+      "sequence_id": "WHu20",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu20.tif",
+      "annotation_member": "Segmentations/WHu20.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        118,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        118,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 118,
+      "first_time_index": 0,
+      "last_time_index": 117,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 116,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 2,
+      "annotation_pixels_range": [
+        11,
+        274
+      ],
+      "filled_area_range_derived": [
+        19,
+        4393
+      ]
+    },
+    {
+      "sequence_id": "WHu21",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu21.tif",
+      "annotation_member": "Segmentations/WHu21.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        183,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        183,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 183,
+      "first_time_index": 0,
+      "last_time_index": 182,
+      "empty_frame_count": 0,
+      "border_frame_count": 1,
+      "closed_curve_candidate_count": 183,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        99,
+        270
+      ],
+      "filled_area_range_derived": [
+        244,
+        3303
+      ]
+    },
+    {
+      "sequence_id": "WHu22",
+      "source_id": "zenodo:7660424",
+      "split": "unknown",
+      "name_hint": null,
+      "image_member": "Videos/WHu22.tif",
+      "annotation_member": "Segmentations/WHu22.tif",
+      "status": "parsed",
+      "issues": [],
+      "physical_frame_interval_seconds": null,
+      "pixel_size_um": null,
+      "image_shape": [
+        213,
+        128,
+        128
+      ],
+      "annotation_shape": [
+        213,
+        128,
+        128
+      ],
+      "image_dtype": "uint16",
+      "annotation_dtype": "uint8",
+      "image_declared_axes": "CYX",
+      "annotation_declared_axes": "ZYX",
+      "axis_interpretation": "stack-as-time from source video; slice order retained",
+      "annotation_values": [
+        0,
+        255
+      ],
+      "frame_count": 213,
+      "first_time_index": 0,
+      "last_time_index": 212,
+      "empty_frame_count": 0,
+      "border_frame_count": 0,
+      "closed_curve_candidate_count": 213,
+      "endpoint_frame_count": 0,
+      "multiple_component_frame_count": 0,
+      "branch_frame_count": 0,
+      "annotation_pixels_range": [
+        44,
+        200
+      ],
+      "filled_area_range_derived": [
+        159,
+        2339
+      ]
+    }
+  ],
+  "duplicates": {
+    "image": {
+      "cross_sequence_group_count": 0,
+      "cross_sequence_groups": [],
+      "within_sequence_repeated_frame_count": 0,
+      "interpretation": "Exact pixel equality only. Annotation equality (especially empty or unchanged labels) does not establish shared experimental origin or split leakage. Official splits unknown."
+    },
+    "annotation": {
+      "cross_sequence_group_count": 0,
+      "cross_sequence_groups": [],
+      "within_sequence_repeated_frame_count": 23,
+      "interpretation": "Exact pixel equality only. Annotation equality (especially empty or unchanged labels) does not establish shared experimental origin or split leakage. Official splits unknown."
+    },
+    "annotation_binary": {
+      "cross_sequence_group_count": 0,
+      "cross_sequence_groups": [],
+      "within_sequence_repeated_frame_count": 23,
+      "interpretation": "Exact pixel equality only. Annotation equality (especially empty or unchanged labels) does not establish shared experimental origin or split leakage. Official splits unknown."
+    }
+  },
+  "sample_sequence_ids": [
+    "WH01",
+    "WHu01"
+  ],
+  "qa_display": "first six consecutive slices; 1/99.5 percentiles per sample for display only; orange original nonzero annotation over observed image; no filled labels exported",
+  "audit_verified_at_utc": "2026-10-21T10:59:00.019840+00:00",
+  "publication_scope": "Metadata, source hashes and QC only; no source pixels or derived image assets"
+}
