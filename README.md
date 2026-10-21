@@ -44,6 +44,7 @@ flowchart LR
 - [项目愿景](docs/project/vision.md)：用户、科学问题与不做的范围。
 - [开发路线图](docs/project/roadmap.md)：阶段依赖与验收闸门。
 - [数据审计](docs/research/data-audit.md)：网页描述、实际文件与尚未解决问题。
+- [相邻工作](docs/research/related-work.md)与[候选假设](docs/research/hypotheses.md)：已有成果、重复风险及可证伪问题。
 - [总任务书 v0.2](docs/project/master-plan-v0.2.md)：完整研发契约。
 - [质量规范](docs/development/quality.md)与 [Git 工作协议](docs/development/git-workflow.md)。
 
