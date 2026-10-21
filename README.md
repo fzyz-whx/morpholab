@@ -1,0 +1,64 @@
+# MorphoLab · 形态实验室
+
+研究真实显微时序中的创面闭合，比较局部神经更新规则与经典动力学、时序网络的预测行为。
+
+**Research prototype · 从零开发中。** 当前正在建立项目规范与公开开发记录，随后核查真实数据。数据尚未通过本地审计，模型未训练，实验未评估，Web 工作台尚未实现。
+
+## 研究问题
+
+给定创面闭合过程的前几个观测时间点，具有共享局部更新规则的神经细胞自动机（Neural Cellular Automata, NCA）能否预测后续形态，并在长期滚动预测中保持稳定？我们将通过固定实验级划分、朴素基线和失败案例评价它，而不预设 NCA 一定更好。
+
+优先审计的数据是 **果蝇胚胎 in vivo 激光创面闭合**，不是体外细胞划痕，也不是临床皮肤伤口。NCA 的网格单元是计算状态，不等同于真实细胞。后期可能加入的干预仅为模型内虚拟实验，不支持现实生物因果或治疗结论。
+
+## 开发状态
+
+| 阶段 | 当前状态 | 可检查的交付 |
+|---|---|---|
+| M-1 仓库启动 | 进行中 | 项目章程、愿景、路线图、工作协议 |
+| M0 数据与相关工作审计 | 待开始 | 下载、校验、标签语义与许可报告 |
+| M1 设计系统与真实数据浏览 | 未实现 | 无产品截图 |
+| M2–M4 数据管线、模型与实验 | 未实现 | 未训练、未评估 |
+| M5–M7 软件闭环与发布 | 未实现 | 无可运行 Web 产品 |
+
+此时没有可演示的预测功能。真实运行界面、原创方法图及科研结果图将随对应功能落地逐步加入。
+
+## 方法与证据边界
+
+计划比较 Persistence、经典边界动力学、小型 ConvGRU/ConvLSTM、基础 NCA，以及有明确假设的最小改进。监督目标和指标必须由数据标签的实际语义决定：骨架线不能直接当作区域真值计算 IoU。
+
+创面视频预测与 NCA 外部信号响应均已有研究；本项目不将这些概念组合称为创新。相关工作、资源预算和对照协议将先于正式训练明确。
+
+```mermaid
+flowchart LR
+  A[公开数据与授权] --> B[下载审计与来源清单]
+  B --> C[预处理与实验级划分]
+  C --> D[基线与 NCA 对照]
+  D --> E[误差分析与可追溯产物]
+  E --> F[Web 科研工作台]
+```
+
+上图表示目标架构，当前仅完成项目启动文档。
+
+## 从这里开始
+
+- [项目愿景](docs/project/vision.md)：用户、科学问题与不做的范围。
+- [开发路线图](docs/project/roadmap.md)：阶段依赖与验收闸门。
+- [总任务书 v0.2](docs/project/master-plan-v0.2.md)：完整研发契约。
+- [质量规范](docs/development/quality.md)与 [Git 工作协议](docs/development/git-workflow.md)。
+
+本机已核对 Python 3.12.10、Node 24.18.0、uv 0.11.3、pnpm 11.22.0。安装和运行命令会在实际执行通过后加入；目前无需安装训练依赖，也不需要 GPU 或商业模型 API。
+
+## 数据、许可与参考
+
+- [Backova 等，Zenodo 7660424](https://doi.org/10.5281/zenodo.7660424)：首选体内创面时序。前期 API 核查标注 CC BY 4.0；压缩包与标签本体仍待本地审计。大型影像不进入 Git。
+- [GigaDB 100118](https://doi.org/10.5524/100118)：不同生物域的体外划痕实验，原始下载与许可待核查，不与果蝇指标混为一组。
+- [BBBC019](https://bbbc.broadinstitute.org/BBBC019)：静态图像辅助资源，不拼成伪造视频。
+- [Growing Neural Cellular Automata](https://distill.pub/2020/growing-ca/)，2020：局部规则、生长与再生的既有工作。
+- [Neural Cellular Automata Can Respond to Signals](https://arxiv.org/abs/2305.12971)，2023：条件响应的相邻工作。
+- [Modeling Wound Healing Using Vector Quantized Variational Autoencoders and Transformers](https://cvpd.github.io/publication/backova-2023-modeling/)，ISBI 2023：本数据体系上的视频预测工作。
+
+源码采用 [MIT License](LICENSE)。第三方数据、论文图片和模型权重遵循各自条款，源码许可证不授予它们的再分发权。
+
+## English overview
+
+MorphoLab is an early research software project for wound-closure morphodynamics in real microscopy time series. It will compare local neural cellular automata with classical and learned forecasting baselines, with experiment-level splits and traceable evidence. The initial domain is **in vivo Drosophila embryonic laser wounds**. No model has been trained or evaluated yet.
