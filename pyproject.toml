@@ -15,8 +15,12 @@ dependencies = [
 [dependency-groups]
 dev = ["mypy>=1.15,<2", "pytest>=8.3,<10", "ruff>=0.11,<1"]
 
-[tool.uv]
-package = false
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ml/morpholab_ml"]
 
 [tool.ruff]
 target-version = "py312"
@@ -32,4 +36,4 @@ pythonpath = ["."]
 [tool.mypy]
 python_version = "3.12"
 strict = true
-files = ["scripts/check_docs.py", "scripts/verify_remote.py"]
+files = ["scripts/check_docs.py", "scripts/verify_remote.py", "ml/morpholab_ml/data/schema.py"]
