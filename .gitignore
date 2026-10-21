@@ -1,6 +1,6 @@
 # Local data, experiment outputs, caches and machine details
-artifacts/
-data/
+/artifacts/
+/data/
 .env
 .env.*
 !.env.example
