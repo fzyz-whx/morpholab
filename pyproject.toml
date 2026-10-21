@@ -10,10 +10,18 @@ dependencies = [
     "tifffile>=2025.1,<2027",
     "pydantic>=2.10,<3",
     "pyyaml>=6.0.2,<7",
+    "fastapi>=0.156.8",
+    "uvicorn>=0.54.0",
 ]
 
 [dependency-groups]
-dev = ["mypy>=1.15,<2", "pytest>=8.3,<10", "ruff>=0.11,<1"]
+dev = [
+    "httpx2>=2.16.0",
+    "mypy>=1.15,<2",
+    "pytest>=8.3,<10",
+    "ruff>=0.11,<1",
+    "scipy-stubs>=1.18.1.1",
+]
 
 [build-system]
 requires = ["hatchling>=1.27,<2"]
@@ -30,7 +38,7 @@ line-length = 100
 select = ["E", "F", "I", "UP", "B"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "backend/tests"]
 pythonpath = ["."]
 
 [tool.mypy]
