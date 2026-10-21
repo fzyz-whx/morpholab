@@ -2,6 +2,7 @@ protocol: morpholab-forecast-v1
 data_protocol: morpholab-split-v1
 observations: 4
 train_horizon: 12
+sampling_horizon: 12
 evaluation_horizons: [4, 12, 24]
 evaluation_stride: 12
 seeds: [17, 29, 43]

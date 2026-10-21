@@ -21,6 +21,7 @@ def synthetic(tmp_path, monkeypatch):
         hidden_channels=4,
         observations=2,
         train_horizon=2,
+        sampling_horizon=2,
         evaluation_horizons=[2],
         evaluation_stride=2,
         validation_interval=2,
@@ -150,3 +151,23 @@ def test_loss_formula_and_sampler_alignment():
     b = runner.sample_batch(sequences, np.random.default_rng(17), 3, 2, 2, torch.device("cpu"))
     assert all(torch.equal(x, y) for x, y in zip(a, b, strict=True))
     assert torch.equal(a[1][:, 0] - a[0][:, 0], torch.full_like(a[1][:, 0], 32))
+
+
+def test_short_loss_ablation_keeps_the_same_candidates_and_historical_inputs(synthetic):
+    manifest, base, _ = synthetic
+    short = copy.deepcopy(base)
+    short.update(protocol="morpholab-forecast-h1-v1", train_horizon=1)
+    first = runner.training_data(manifest, base)["train"]
+    second = runner.training_data(manifest, short)["train"]
+    assert first[0]["starts"] == second[0]["starts"]
+    a = runner.sample_batch(first, np.random.default_rng(17), 3, 2, 2, torch.device("cpu"))
+    b = runner.sample_batch(second, np.random.default_rng(17), 3, 2, 1, torch.device("cpu"))
+    assert torch.equal(a[0], b[0])
+    assert torch.equal(a[1][:, :1], b[1])
+
+
+def test_sampling_span_cannot_be_shorter_than_supervision(synthetic):
+    _, config, _ = synthetic
+    config["sampling_horizon"] = 1
+    with pytest.raises(ValueError, match="Sampling horizon"):
+        runner.validate_config(config)

@@ -1,0 +1,37 @@
+protocol: morpholab-forecast-h1-v1
+data_protocol: morpholab-split-v1
+observations: 4
+train_horizon: 1
+sampling_horizon: 12
+evaluation_horizons:
+- 4
+- 12
+- 24
+evaluation_stride: 12
+seeds:
+- 17
+- 29
+- 43
+models:
+- convgru
+- nca
+- nca_regularized
+state_channels: 16
+hidden_channels: 64
+step_size: 0.1
+state_limit: 4.0
+fire_rate: 1.0
+maximum_steps: 600
+batch_size: 8
+learning_rate: 0.002
+gradient_clip: 1.0
+validation_interval: 100
+training_augmentation: rotate90_and_flip
+loss:
+  sdf_weight: 1.0
+  boundary_weight: 4.0
+  boundary_decay: 4.0
+  soft_region_scale: 5.0
+  dice_weight: 0.1
+  nca_update_penalty: 0.001
+precision: fp32

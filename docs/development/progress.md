@@ -110,3 +110,9 @@
 - 41项模型、7项训练机制CPU合成测试通过；三模型恢复与连续运行参数相同。全套CPU环境226 passed、1项Windows symlink权限skip，模型单模块与6个基础重点模块mypy通过。
 - 实际GPU Torch2.11.0+cu128支持sm_120；三模型各3步batch8/H12、IEEE fp32、deterministic合成优化核验通过。此证据不算真实训练成绩。
 - CI Ubuntu增加CPU/报告extra并运行模型类型与训练fixture，Windows保留基础轻量检查。源码提交、push核对后才能启动真实数据正式run。
+
+## M4 消融预注册补充 · 2026-10-21
+
+- 模型与训练提交 `5739b220867fece1b4b6dd040936a50a320a8cd2` 已即时push、SHA核对；CI运行[39627733576](https://github.com/fzyz-whx/morpholab/actions/runs/39627733576)已触发。
+- 在任何真实神经训练/test分数之前，ADR-0003固定H1消融仍使用H12候选窗口，同seed历史与增强流保持一致，避免因候选池变化混淆效果；H1也运行3seeds。
+- 新增匹配历史/未来前缀与采样跨度拒绝测试；不调模型结构、源数据或test划分。所有正式run将使用此补充后的源码版本。

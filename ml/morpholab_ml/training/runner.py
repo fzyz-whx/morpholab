@@ -65,6 +65,7 @@ def validate_config(config: dict[str, Any]) -> None:
         "data_protocol",
         "observations",
         "train_horizon",
+        "sampling_horizon",
         "evaluation_horizons",
         "evaluation_stride",
         "seeds",
@@ -86,7 +87,7 @@ def validate_config(config: dict[str, Any]) -> None:
     if set(config) != required:
         raise ValueError("Unknown or missing training configuration keys")
     if (
-        config["protocol"] != "morpholab-forecast-v1"
+        config["protocol"] not in {"morpholab-forecast-v1", "morpholab-forecast-h1-v1"}
         or config["data_protocol"] != "morpholab-split-v1"
         or config["precision"] != "fp32"
         or config["training_augmentation"] != "rotate90_and_flip"
@@ -95,6 +96,7 @@ def validate_config(config: dict[str, Any]) -> None:
     for key in (
         "observations",
         "train_horizon",
+        "sampling_horizon",
         "evaluation_stride",
         "state_channels",
         "hidden_channels",
@@ -106,6 +108,8 @@ def validate_config(config: dict[str, Any]) -> None:
             raise ValueError(f"Invalid positive integer: {key}")
     if config["maximum_steps"] > 600 or config["observations"] < 2:
         raise ValueError("ADR-0002 permits at most 600 optimization steps and L>=2")
+    if config["sampling_horizon"] < config["train_horizon"]:
+        raise ValueError("Sampling horizon cannot be shorter than the supervised horizon")
     if (
         not isinstance(config["evaluation_horizons"], list)
         or not config["evaluation_horizons"]
@@ -191,7 +195,7 @@ def training_data(manifest_path: Path, config: dict[str, Any]) -> dict[str, list
             continue  # Never open test NPZs, including during resume or checkpoint selection.
         arrays = load_sequence(manifest_path.parent, record)
         horizon = (
-            config["train_horizon"] if split == "train" else max(config["evaluation_horizons"])
+            config["sampling_horizon"] if split == "train" else max(config["evaluation_horizons"])
         )
         stride = 1 if split == "train" else config["evaluation_stride"]
         starts = window_starts(arrays["valid"], config["observations"], horizon, stride)
