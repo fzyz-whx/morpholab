@@ -95,3 +95,10 @@
 - 基线实现提交 `bd3703294b679b9c140f18658e624162f3485e7e` 已即时push核对；从干净工作树运行正式validation，run记录dirty=false、完整清单、12序列/103窗口/4排除，报告待审查。
 - ADR-0002冻结共同历史摘要、NCA/ConvGRU及单一惩罚消融，3seeds与600步预算，不查看test分数调参。
 - 可选CPU/CUDA及报告依赖锁定；独立CPU环境已实际导入Torch2.11.0+cpu与Matplotlib并完成模型/恢复fixture。基础审计/浏览不需要Torch。CUDA 12.8轮子仍在本机下载，此时不声称GPU训练可用。
+
+## M2 闸门与正式validation报告 · 2026-10-21
+
+- 可选运行环境与协议提交 `33b1778b02d17eeff66eb1ddfd612a7e535cd4a0` 已立即push并核对。
+- 正式run `baselines-validation-v1` 来源为已同步的`bd3703294b679b9c140f18658e624162f3485e7e`，dirty=false，12源序列、103窗口、4个QC排除，耗时2.891秒。未读取test数组。
+- 报告脚本核对Git blob/数据hash、逐窗口到序列等权汇总并生成Matplotlib真实曲线；主代理实看曲线和WH24恒速空预测失败图。7项报告契约测试通过。
+- 恒速24个lead的IoU均未胜Persistence；面积endpoint更低不代表整体形态更好。完整报告保留无seed训练统计、重叠窗口非独立、派生标签和空边界惩罚的限制，M2验收通过。

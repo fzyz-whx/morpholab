@@ -2,7 +2,7 @@
 
 研究真实显微时序中的创面闭合，比较局部神经更新规则与经典动力学、时序网络的预测行为。
 
-**Research prototype · 开发中。** 已完整校验并解析62条、7,229帧真实创面时序，并可在Web工作台浏览原图、原始薄轮廓和逐帧QC。官方划分映射仍未知，项目采用独立协议。模型未训练，实验未评估。
+**Research prototype · 开发中。** 已完整校验并解析62条、7,229帧真实创面时序，并可在Web工作台浏览原图、原始薄轮廓和逐帧QC。官方划分映射仍未知，项目采用独立协议。经典基线已完成validation评价；神经模型未训练，尚无正式test结果。
 
 ![MorphoLab真实序列工作台](assets/screenshots/studio-real-sequence.png)
 
@@ -21,7 +21,7 @@ WH01第0帧，1440×900实际浏览器。灰度为真实观测，浅色线为发
 | M-1 仓库启动 | 已完成 | 公开仓库、工作协议、Windows / Ubuntu CI 通过 |
 | M0 数据与相关工作审计 | 已通过，限制保留 | 全量解析、来源清单、本地QA、派生目标与独立协议ADR |
 | M1 设计系统与真实数据浏览 | 已通过 | 真实浏览、图层/时间轴/QC、双桌面截图、真实E2E及远端CI |
-| M2 经典基线 | 实现就绪，正式评估待运行 | Persistence、恒速几何基线、逐序列评价与失败记录 |
+| M2 经典基线 | 已通过 | 完整可复现管线、正式validation评价、逐序列指标与负结果 |
 | M3–M4 神经模型与正式实验 | 未实现 | 未训练、未评估 |
 | M5–M7 软件闭环与发布 | 未实现 | 无可运行 Web 产品 |
 
@@ -125,6 +125,14 @@ uv run --locked python scripts/evaluate.py
 ```
 
 默认只评估validation，保存逐窗口/lead分数、逐序列等权汇总、Git/数据hash和失败图到本地新目录。[方法定义](docs/architecture/baseline-evaluation.md)解释指标、空边界惩罚和独立性限制；当前尚无可引用的正式test结果。
+
+## 初始研究证据
+
+![确定性基线在真实validation上的误差曲线](assets/figures/baselines-validation-v1.png)
+
+本项目validation的12条源序列、103个重叠窗口，L=4，未来lead 1–24；先序列内平均，再对源序列等权。目标为CC BY 4.0源注释经过QC生成的派生区域，网格64×64，不是原始人工填充mask。两种基线无随机训练，因此图中没有seed误差带。
+
+**恒速没有在IoU上胜过Persistence。** H24的IoU分别为0.3521和0.3953；恒速在三个endpoint的面积MAE更低，但出现提前闭合的空边界失败，不能据此称总体更好。没有根据这些结果调参追分。[完整报告、失败案例与来源hash](docs/research/baselines-validation-v1.md)可查，神经模型和test结论仍待实测。
 
 公开仓库检查会验证本地文档链接并拦截部分敏感文件模式；它不能替代人工许可和秘密审查。远端同步可运行 `uv run --locked python scripts/verify_remote.py` 实时核对，不以缓存的 origin 状态代替。
 
