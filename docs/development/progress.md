@@ -78,3 +78,7 @@
 - 修复1280图像裁切与较小字号，主代理实看两桌面尺寸更新截图，增强E2E验证完整边界与纵横比、手动滚动和fit复位。负责人已选择沿当前视觉方向继续，优先科研闭环。
 - 7项组件fixture、1项synthetic浏览器回归、3项真实HTTP数据E2E分别通过，lint/format/strict类型/生产构建通过。CI新增前端检查与离线浏览器fixture，不下载真实影像。
 - M1本机验收通过；本提交push后单独核对新增远端前端CI，未预写成功结论。M2正式baseline评估与NCA尚未训练。
+
+### 远端CI触发核验
+
+工作台提交 `da23cda08febf29bc0f0069c9ee438957fc8a7b4` 已即时push并核对。远端分支API也确认此SHA，但Actions运行查询未找到该head的记录；仓库Actions为enabled、workflow为active，暂未查明未触发原因。新增显式workflow_dispatch入口并保留原push/PR触发，以实际手动执行核验新前端CI，不能把源码已同步当作检查已通过。
