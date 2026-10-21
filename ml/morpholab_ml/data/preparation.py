@@ -158,4 +158,4 @@ def reference_fingerprint(images: NDArray[Any]) -> NDArray[np.float64] | None:
     norms = np.linalg.norm(thumbnails, axis=1, keepdims=True)
     if (norms == 0).any():
         return None
-    return (thumbnails / norms).ravel() / np.sqrt(3)
+    return np.asarray((thumbnails / norms).ravel() / np.sqrt(3), dtype=np.float64)

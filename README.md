@@ -21,7 +21,8 @@ WH01第0帧，1440×900实际浏览器。灰度为真实观测，浅色线为发
 | M-1 仓库启动 | 已完成 | 公开仓库、工作协议、Windows / Ubuntu CI 通过 |
 | M0 数据与相关工作审计 | 已通过，限制保留 | 全量解析、来源清单、本地QA、派生目标与独立协议ADR |
 | M1 设计系统与真实数据浏览 | 本机验收通过，CI待核对 | 真实浏览、图层/时间轴/QC、双桌面截图与真实E2E |
-| M2–M4 数据管线、模型与实验 | 未实现 | 未训练、未评估 |
+| M2 经典基线 | 实现就绪，正式评估待运行 | Persistence、恒速几何基线、逐序列评价与失败记录 |
+| M3–M4 神经模型与正式实验 | 未实现 | 未训练、未评估 |
 | M5–M7 软件闭环与发布 | 未实现 | 无可运行 Web 产品 |
 
 当前可以浏览数据，没有可演示的模型预测。科研结果图将在真实实验落地后加入。
@@ -116,6 +117,14 @@ pnpm --dir frontend test:e2e:real
 ```
 
 `test:e2e`使用标明为synthetic的HTTP fixture；`test:e2e:real`实际要求上述数据和API已就绪，不以mock代替。Windows默认使用本机Edge，Linux/CI先运行 `pnpm --dir frontend exec playwright install chromium` 安装测试浏览器。
+
+经典基线与几何指标的CPU命令：
+
+```sh
+uv run --locked python scripts/evaluate.py
+```
+
+默认只评估validation，保存逐窗口/lead分数、逐序列等权汇总、Git/数据hash和失败图到本地新目录。[方法定义](docs/architecture/baseline-evaluation.md)解释指标、空边界惩罚和独立性限制；当前尚无可引用的正式test结果。
 
 公开仓库检查会验证本地文档链接并拦截部分敏感文件模式；它不能替代人工许可和秘密审查。远端同步可运行 `uv run --locked python scripts/verify_remote.py` 实时核对，不以缓存的 origin 状态代替。
 

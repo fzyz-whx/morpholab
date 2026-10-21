@@ -82,3 +82,9 @@
 ### 远端CI触发核验
 
 工作台提交 `da23cda08febf29bc0f0069c9ee438957fc8a7b4` 已即时push并核对。远端分支API也确认此SHA，但Actions运行查询未找到该head的记录；仓库Actions为enabled、workflow为active，暂未查明未触发原因。新增显式workflow_dispatch入口并保留原push/PR触发，以实际手动执行核验新前端CI，不能把源码已同步当作检查已通过。
+
+## M2.1 · 经典预测与评价代码 · 2026-10-21
+
+- CI触发入口提交 `9db8b2ebcd689fa6bee301bf1f1c6ade55e96f22` 已即时push、SHA核对，手动运行记录为[39622030041](https://github.com/fzyz-whx/morpholab/actions/runs/39622030041)，结果待单独核验。
+- 实现Persistence/恒速几何预测、派生区域与边界指标、完整源CLI、安全NPZ/分组校验、统一最长H窗口、序列等权汇总与失败案例；33项针对性测试通过，6个重点源模块mypy通过。
+- 提交前曾运行dirty validation pilot；不将其称为对应Git commit的可复现实验。代码同步后立即从干净工作树运行正式validation，test不参与选模。

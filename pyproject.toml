@@ -44,4 +44,11 @@ pythonpath = ["."]
 [tool.mypy]
 python_version = "3.12"
 strict = true
-files = ["scripts/check_docs.py", "scripts/verify_remote.py", "ml/morpholab_ml/data/schema.py"]
+files = [
+    "scripts/check_docs.py",
+    "scripts/verify_remote.py",
+    "ml/morpholab_ml/data/schema.py",
+    "ml/morpholab_ml/data/preparation.py",
+    "ml/morpholab_ml/evaluation/metrics.py",
+    "ml/morpholab_ml/baselines/geometric.py",
+]
