@@ -102,3 +102,11 @@
 - 正式run `baselines-validation-v1` 来源为已同步的`bd3703294b679b9c140f18658e624162f3485e7e`，dirty=false，12源序列、103窗口、4个QC排除，耗时2.891秒。未读取test数组。
 - 报告脚本核对Git blob/数据hash、逐窗口到序列等权汇总并生成Matplotlib真实曲线；主代理实看曲线和WH24恒速空预测失败图。7项报告契约测试通过。
 - 恒速24个lead的IoU均未胜Persistence；面积endpoint更低不代表整体形态更好。完整报告保留无seed训练统计、重叠窗口非独立、派生标签和空边界惩罚的限制，M2验收通过。
+
+## M3.1 · 共享局部模型与可恢复训练机制 · 2026-10-21
+
+- 基线报告提交 `897273675e6145f20e9d59d052b14b8a3a11f2e6` 已即时push并核对。
+- 独立实现16通道NCA、同构正则版本和ConvGRU，严格历史摘要与自由rollout，固定感知、输出与dtype合同；checkpoint安全加载和来源metadata完整。
+- 41项模型、7项训练机制CPU合成测试通过；三模型恢复与连续运行参数相同。全套CPU环境226 passed、1项Windows symlink权限skip，模型单模块与6个基础重点模块mypy通过。
+- 实际GPU Torch2.11.0+cu128支持sm_120；三模型各3步batch8/H12、IEEE fp32、deterministic合成优化核验通过。此证据不算真实训练成绩。
+- CI Ubuntu增加CPU/报告extra并运行模型类型与训练fixture，Windows保留基础轻量检查。源码提交、push核对后才能启动真实数据正式run。

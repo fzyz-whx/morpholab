@@ -22,7 +22,8 @@ WH01第0帧，1440×900实际浏览器。灰度为真实观测，浅色线为发
 | M0 数据与相关工作审计 | 已通过，限制保留 | 全量解析、来源清单、本地QA、派生目标与独立协议ADR |
 | M1 设计系统与真实数据浏览 | 已通过 | 真实浏览、图层/时间轴/QC、双桌面截图、真实E2E及远端CI |
 | M2 经典基线 | 已通过 | 完整可复现管线、正式validation评价、逐序列指标与负结果 |
-| M3–M4 神经模型与正式实验 | 未实现 | 未训练、未评估 |
+| M3 神经模型 | 核心与训练机制验证通过 | NCA/ConvGRU、保存恢复、CPU与GPU合成核验；真实未训练 |
+| M4 正式神经实验 | 未开始 | 未评估 |
 | M5–M7 软件闭环与发布 | 未实现 | 无可运行 Web 产品 |
 
 当前可以浏览数据，没有可演示的模型预测。科研结果图将在真实实验落地后加入。
@@ -133,6 +134,21 @@ uv run --locked python scripts/evaluate.py
 本项目validation的12条源序列、103个重叠窗口，L=4，未来lead 1–24；先序列内平均，再对源序列等权。目标为CC BY 4.0源注释经过QC生成的派生区域，网格64×64，不是原始人工填充mask。两种基线无随机训练，因此图中没有seed误差带。
 
 **恒速没有在IoU上胜过Persistence。** H24的IoU分别为0.3521和0.3953；恒速在三个endpoint的面积MAE更低，但出现提前闭合的空边界失败，不能据此称总体更好。没有根据这些结果调参追分。[完整报告、失败案例与来源hash](docs/research/baselines-validation-v1.md)可查，神经模型和test结论仍待实测。
+
+## 神经模型的运行准备
+
+独立实现的NCA和summary-conditioned ConvGRU已通过数值、梯度及恢复检查，尚未进行真实数据正式训练。[模型结构与训练合同](docs/architecture/forecast-models.md)及[冻结预算](docs/project/decisions/ADR-0002-local-models-and-training-budget.md)公开说明了输入与对照边界。
+
+```sh
+# CPU路径；基础审计与数据浏览不需要安装这个extra
+uv sync --locked --extra cpu
+uv run --locked --extra cpu pytest -q tests/test_forecast_models.py tests/test_training.py
+
+# 准备好实际数据后训练一个seed；默认600步，checkpoint留在本地
+uv run --locked --extra cpu python scripts/train.py --model nca --seed 17
+```
+
+有兼容NVIDIA环境时可将`cpu`换成`cuda`。两种extra互斥；GPU可用性以运行检查为准，不从安装成功推断。恢复使用`--resume <原运行目录>/last.pt`，会验证数据、源码、模型和关键训练配置。
 
 公开仓库检查会验证本地文档链接并拦截部分敏感文件模式；它不能替代人工许可和秘密审查。远端同步可运行 `uv run --locked python scripts/verify_remote.py` 实时核对，不以缓存的 origin 状态代替。
 

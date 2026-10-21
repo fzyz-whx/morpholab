@@ -12,7 +12,11 @@ jobs:
   python-and-docs:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            extras: "--extra cpu --extra reports"
+          - os: windows-latest
+            extras: ""
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -20,11 +24,13 @@ jobs:
         with:
           version: "0.11.3"
           enable-cache: true
-      - run: uv sync --locked --python 3.12
+      - run: uv sync --locked --python 3.12 ${{ matrix.extras }}
       - run: uv run --locked ruff check .
       - run: uv run --locked ruff format --check .
       - run: uv run --locked pytest -q
       - run: uv run --locked mypy
+      - if: runner.os == 'Linux'
+        run: uv run --locked --extra cpu --extra reports mypy ml/morpholab_ml/models/forecast.py
       - run: uv run --locked python scripts/check_docs.py
 
   frontend:
