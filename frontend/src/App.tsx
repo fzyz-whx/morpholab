@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { PRIMARY_DATASET, frameUrl, splitLabel, useDatasets, useSequences } from './api';
 import { Arrow, ModelState, QueryState, SourceDetails } from './components';
 import Studio from './Studio';
+import Research from './Research';
 
 function Shell() {
   return (
@@ -42,7 +43,7 @@ function Shell() {
         <Route path="/" element={<Overview />} />
         <Route path="/datasets" element={<Archive />} />
         <Route path="/studio/:sequenceId" element={<Studio />} />
-        <Route path="/research" element={<ProtocolPage />} />
+        <Route path="/research" element={<Research />} />
         <Route path="/methods" element={<ProtocolPage methods />} />
         <Route
           path="*"
@@ -92,7 +93,7 @@ function Overview() {
           </Link>
           <div className="overview-footnote">
             <span className="status-dot" />
-            M1 · 真实数据浏览 <span className="divider-text">/</span> 模型未训练
+            M5 · 观测与形态推理 <span className="divider-text">/</span> 本地实验工作区
           </div>
         </div>
         <div className="specimen">
@@ -134,10 +135,10 @@ function Overview() {
       <section className="overview-ledger">
         <div className="section-index">01 / AVAILABLE NOW</div>
         <div>
-          <h2>真实数据链，已进入浏览阶段</h2>
+          <h2>真实数据与可追溯的形态预测</h2>
           <p>
             已下载的序列保留原注释和逐帧
-            QC；当前界面不生成未来图像。来源、划分与未知元数据随观测一起呈现。
+            QC；工作台加载已注册模型预测未来轮廓。来源、划分与未知元数据随观测一起呈现，灰度原帧不冒充生成影像。
           </p>
         </div>
         <dl className="ledger-stats">
@@ -262,7 +263,7 @@ function Archive() {
               {selected?.doi ?? '官方记录'} ↗
             </a>
             <span>{selected?.license ?? '许可未核实'}</span>
-            <span>模型未训练 / 未评估</span>
+            <Link to="/research">模型评估与研究报告 ↗</Link>
           </div>
         </div>
         {selected?.local_available ? (
@@ -401,7 +402,7 @@ function ProtocolPage({ methods = false }: { methods?: boolean }) {
           <p>
             {methods
               ? '明确每一层数据的含义，是比较模型之前的工作。'
-              : '当前完成真实数据审计与浏览；训练实验和性能结论尚未产生。'}
+              : '已完成12次真实训练与冻结test评价；完整多指标和失败案例见研究记录。'}
           </p>
         </div>
       </div>
@@ -488,8 +489,8 @@ function ProtocolPage({ methods = false }: { methods?: boolean }) {
                   的窗口；序列和裁剪不得跨划分。所有归一化统计只由训练集拟合。
                 </p>
                 <p>
-                  模型、预算、多 seed、配置和失败标准仍需冻结后才能正式训练。每次实验应记录 Git
-                  SHA、数据及权重 hash、环境与实际预算。
+                  模型、预算、多 seed、配置和失败标准已由ADR冻结。每次实验记录 Git SHA、数据及权重
+                  hash、环境与实际预算。
                 </p>
               </section>
               <section>

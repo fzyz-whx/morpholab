@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { frameUrl, splitLabel, useDatasets, useSequence, useSequences } from './api';
 import type { Layer, SequenceDetail } from './api';
 import { Arrow, ModelState, QueryState, SourceDetails } from './components';
+import PredictionPanel, { PredictionMetrics } from './PredictionPanel';
+import type { PredictionResult } from './prediction-api';
 
 const layerNames: Record<Layer, string> = {
   observed: '真实观测',
@@ -36,6 +38,17 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
   const [viewportSize, setViewportSize] = useState({ width: 128, height: 128 });
   const viewportRef = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [inspectorTab, setInspectorTab] = useState<'frame' | 'prediction'>('frame');
+  const [prediction, setPrediction] = useState<PredictionResult | null>(null);
+  const [showPrediction, setShowPrediction] = useState(true);
+  const [showError, setShowError] = useState(false);
+  const predictedFrame = prediction?.frames.find((item) => item.source_frame_index === frame);
+  const receivePrediction = useCallback((result: PredictionResult) => {
+    setPrediction(result);
+    setPlaying(false);
+    if (result.frames[0]) setFrame(result.frames[0].source_frame_index);
+    setShowPrediction(true);
+  }, []);
   const datasets = useDatasets();
   const sequences = useSequences(sequence.dataset_id);
   const dataset = datasets.data?.find((d) => d.id === sequence.dataset_id);
@@ -133,7 +146,8 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
         </div>
         <div className="studio-heading-meta">
           <span className="status-dot" />
-          真实观测<span className="muted">模型未训练</span>
+          真实观测
+          <span className="muted">{prediction ? 'PREDICTION · 形态推理' : '观测与原注释'}</span>
         </div>
       </div>
       <div className="studio-layout">
@@ -152,6 +166,25 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
                 {sequence.width} × {sequence.height} px
               </span>
             </div>
+            {prediction && (
+              <>
+                <button
+                  className="prediction-layer-toggle"
+                  aria-pressed={showPrediction}
+                  onClick={() => setShowPrediction(!showPrediction)}
+                >
+                  <span className="prediction-line" />
+                  预测轮廓 <span className="mono">PREDICTION</span>
+                </button>
+                <button
+                  className="prediction-layer-toggle"
+                  aria-pressed={showError}
+                  onClick={() => setShowError(!showError)}
+                >
+                  派生区域误差 <span className="mono">FP / FN</span>
+                </button>
+              </>
+            )}
           </div>
           <div className="sidebar-section">
             <span className="eyebrow">VIEW LAYERS</span>
@@ -204,6 +237,9 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
                   ? 'OBSERVED + ANNOTATION'
                   : 'OBSERVED'}
             </div>
+            <button className="prediction-open" onClick={() => setInspectorTab('prediction')}>
+              预测实验
+            </button>
             <label className="zoom-control">
               <span>缩放</span>
               <input
@@ -240,6 +276,9 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
               alt={`${sequence.id} 第 ${frame} 帧 · ${layerNames[layer]}`}
               width={sequence.width * zoom}
               height={sequence.height * zoom}
+              prediction={showPrediction ? predictedFrame : undefined}
+              predictionGrid={prediction?.grid}
+              showError={showError}
             />
             <span className="viewport-coordinate coord-bottom">
               {sequence.width} × {sequence.height} PIXEL GRID
@@ -257,7 +296,18 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
                 ANNOTATION · 原始薄轮廓
               </span>
             )}
-            <span className="muted">显示转换 · 非预测</span>
+            {prediction && showPrediction && predictedFrame && (
+              <span className="prediction-ink">
+                <i className="legend-prediction" />
+                PREDICTION · Lead {predictedFrame.lead} · 虚线轮廓
+              </span>
+            )}
+            {prediction && showPrediction && showError && predictedFrame?.target_valid && (
+              <span>误差层：琥珀 FP 多预测 / 玫红 FN 漏预测 · DERIVED TARGET</span>
+            )}
+            <span className="muted">
+              {prediction ? '灰度原帧为 OBSERVED · 非生成影像' : '显示转换 · 非预测'}
+            </span>
           </div>
           <Timeline
             frame={frame}
@@ -266,6 +316,7 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
             onSeek={seek}
             onToggle={togglePlay}
             invalidFrames={sequence.frames.filter((f) => !f.qc_valid).map((f) => f.frame_index)}
+            predictionRequest={prediction?.request}
           />
           <div className="canvas-bottom-note">
             <span>
@@ -275,75 +326,100 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
           </div>
         </section>
         <aside className="inspector">
-          <section className="inspector-section">
-            <span className="eyebrow">FRAME INSPECTOR</span>
-            <div className="frame-title">
-              <span>当前帧</span>
-              <strong className="mono">
-                {String(frame).padStart(3, '0')}
-                <small> / {last}</small>
-              </strong>
+          <div className="inspector-tabs" role="group" aria-label="工作台检查面板">
+            <button
+              aria-pressed={inspectorTab === 'frame'}
+              onClick={() => setInspectorTab('frame')}
+            >
+              帧检查
+            </button>
+            <button
+              aria-pressed={inspectorTab === 'prediction'}
+              onClick={() => setInspectorTab('prediction')}
+            >
+              预测实验
+            </button>
+          </div>
+          <div hidden={inspectorTab !== 'prediction'}>
+            <PredictionPanel
+              sequence={sequence}
+              frame={frame}
+              onResult={receivePrediction}
+              onClear={() => setPrediction(null)}
+            />
+            {prediction && <PredictionMetrics result={prediction} current={predictedFrame} />}
+          </div>
+          <div hidden={inspectorTab !== 'frame'}>
+            <section className="inspector-section">
+              <span className="eyebrow">FRAME INSPECTOR</span>
+              <div className="frame-title">
+                <span>当前帧</span>
+                <strong className="mono">
+                  {String(frame).padStart(3, '0')}
+                  <small> / {last}</small>
+                </strong>
+              </div>
+              <div className={`qc-state ${metadata?.qc_valid ? 'valid' : 'invalid'}`}>
+                <span className={metadata?.qc_valid ? 'status-dot' : 'hollow-dot'} />
+                {metadata?.qc_valid ? '轮廓 QC 通过' : '轮廓 QC 未通过'}
+              </div>
+              <dl className="inspector-facts">
+                <div>
+                  <dt>原注释</dt>
+                  <dd>骨架化薄轮廓</dd>
+                </div>
+                <div>
+                  <dt>触及图边</dt>
+                  <dd>
+                    {metadata ? (metadata.touches_border ? '是 · 不用于训练窗口' : '否') : '未知'}
+                  </dd>
+                </div>
+                <div>
+                  <dt>有效 QC</dt>
+                  <dd className="mono">
+                    {sequence.qc_valid_count} / {sequence.frame_count}
+                  </dd>
+                </div>
+                <div>
+                  <dt>QC 范围</dt>
+                  <dd>
+                    {sequence.qc_definition?.includes('source-only')
+                      ? '仅原轮廓检查'
+                      : '轮廓与派生目标'}
+                  </dd>
+                </div>
+                <div>
+                  <dt>本项目划分</dt>
+                  <dd>{splitLabel(sequence.project_split)}</dd>
+                </div>
+                <div>
+                  <dt>官方划分</dt>
+                  <dd>{sequence.official_split ?? '未知'}</dd>
+                </div>
+                <div>
+                  <dt>帧时间</dt>
+                  <dd>
+                    {metadata?.timestamp_min != null ? `${metadata.timestamp_min} min` : '未核实'}
+                  </dd>
+                </div>
+              </dl>
+              {!metadata?.qc_valid && (
+                <p className="qc-explanation">
+                  此帧仍保留可见。包含该帧的训练或评估窗口将排除，不自动补线。
+                </p>
+              )}
+            </section>
+            <section className="inspector-section">
+              <ModelState />
+            </section>
+            <section className="inspector-section">
+              <SourceDetails compact dataset={dataset} />
+            </section>
+            <div className="inspector-bottom">
+              <Link to="/methods">
+                标签与划分协议 <Arrow />
+              </Link>
             </div>
-            <div className={`qc-state ${metadata?.qc_valid ? 'valid' : 'invalid'}`}>
-              <span className={metadata?.qc_valid ? 'status-dot' : 'hollow-dot'} />
-              {metadata?.qc_valid ? '轮廓 QC 通过' : '轮廓 QC 未通过'}
-            </div>
-            <dl className="inspector-facts">
-              <div>
-                <dt>原注释</dt>
-                <dd>骨架化薄轮廓</dd>
-              </div>
-              <div>
-                <dt>触及图边</dt>
-                <dd>
-                  {metadata ? (metadata.touches_border ? '是 · 不用于训练窗口' : '否') : '未知'}
-                </dd>
-              </div>
-              <div>
-                <dt>有效 QC</dt>
-                <dd className="mono">
-                  {sequence.qc_valid_count} / {sequence.frame_count}
-                </dd>
-              </div>
-              <div>
-                <dt>QC 范围</dt>
-                <dd>
-                  {sequence.qc_definition?.includes('source-only')
-                    ? '仅原轮廓检查'
-                    : '轮廓与派生目标'}
-                </dd>
-              </div>
-              <div>
-                <dt>本项目划分</dt>
-                <dd>{splitLabel(sequence.project_split)}</dd>
-              </div>
-              <div>
-                <dt>官方划分</dt>
-                <dd>{sequence.official_split ?? '未知'}</dd>
-              </div>
-              <div>
-                <dt>帧时间</dt>
-                <dd>
-                  {metadata?.timestamp_min != null ? `${metadata.timestamp_min} min` : '未核实'}
-                </dd>
-              </div>
-            </dl>
-            {!metadata?.qc_valid && (
-              <p className="qc-explanation">
-                此帧仍保留可见。包含该帧的训练或评估窗口将排除，不自动补线。
-              </p>
-            )}
-          </section>
-          <section className="inspector-section">
-            <ModelState />
-          </section>
-          <section className="inspector-section">
-            <SourceDetails compact dataset={dataset} />
-          </section>
-          <div className="inspector-bottom">
-            <Link to="/methods">
-              标签与划分协议 <Arrow />
-            </Link>
           </div>
         </aside>
       </div>
@@ -354,7 +430,11 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
         </span>
         <span>morpholab-split-v1</span>
         <span>{dataset?.license ?? '许可读取中'}</span>
-        <span>未训练 · 未评估</span>
+        <span>
+          {prediction
+            ? `PREDICTION / ${prediction.request.model_id}`
+            : '原始数据浏览 / 预测按需运行'}
+        </span>
       </footer>
     </>
   );
@@ -365,26 +445,80 @@ function FrameImage({
   alt,
   width,
   height,
+  prediction,
+  predictionGrid,
+  showError,
 }: {
   src: string;
   alt: string;
   width: number;
   height: number;
+  prediction?: import('./prediction-api').PredictedFrame;
+  predictionGrid?: { width: number; height: number };
+  showError?: boolean;
 }) {
   const [state, setState] = useState<'loading' | 'loaded' | 'error'>('loading');
   const [attempt, setAttempt] = useState(0);
   return (
     <>
-      <img
-        className="scientific-image"
-        src={attempt ? `${src}&retry=${attempt}` : src}
-        alt={alt}
-        width={width}
-        height={height}
-        onLoad={() => setState('loaded')}
-        onError={() => setState('error')}
-        style={{ width, height, visibility: state === 'loaded' ? 'visible' : 'hidden' }}
-      />
+      <div
+        className="frame-geometry"
+        style={{ width, height, position: 'relative', flexShrink: 0 }}
+      >
+        <img
+          className="scientific-image"
+          src={attempt ? `${src}&retry=${attempt}` : src}
+          alt={alt}
+          width={width}
+          height={height}
+          onLoad={() => setState('loaded')}
+          onError={() => setState('error')}
+          style={{ width, height, visibility: state === 'loaded' ? 'visible' : 'hidden' }}
+        />
+        {prediction && predictionGrid && state === 'loaded' && (
+          <svg
+            className="prediction-overlay"
+            role="img"
+            aria-label={`PREDICTION Lead ${prediction.lead}，工作网格预测轮廓`}
+            viewBox={`-0.5 -0.5 ${predictionGrid.width} ${predictionGrid.height}`}
+            preserveAspectRatio="none"
+          >
+            <title>PREDICTION · 预测轮廓，非原始注释</title>
+            {showError &&
+              prediction.target_valid &&
+              prediction.target_region &&
+              prediction.region.flatMap((row, y) =>
+                row.flatMap((pixel, x) => {
+                  const target = prediction.target_region![y][x];
+                  return pixel === target
+                    ? []
+                    : [
+                        <rect
+                          key={`${x}-${y}`}
+                          x={x - 0.5}
+                          y={y - 0.5}
+                          width="1"
+                          height="1"
+                          fill={pixel ? '#E2B875' : '#D795AB'}
+                          opacity="0.5"
+                        />,
+                      ];
+                }),
+              )}
+            {prediction.contours.map((points, index) => (
+              <polyline
+                key={index}
+                points={points.map(([x, y]) => `${x},${y}`).join(' ')}
+                fill="none"
+                stroke="#E2B875"
+                strokeWidth="1.5"
+                strokeDasharray="5 3"
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
+          </svg>
+        )}
+      </div>
       {state === 'loading' && (
         <div className="image-feedback" role="status">
           正在读取真实帧…
@@ -414,6 +548,7 @@ export function Timeline({
   onSeek,
   onToggle,
   invalidFrames,
+  predictionRequest,
 }: {
   frame: number;
   last: number;
@@ -421,6 +556,7 @@ export function Timeline({
   onSeek: (n: number) => void;
   onToggle: () => void;
   invalidFrames: number[];
+  predictionRequest?: import('./prediction-api').PredictionRequest;
 }) {
   return (
     <section className="timeline" aria-label="帧时间轴">
@@ -431,7 +567,40 @@ export function Timeline({
           <span className="muted">/ {last}</span>
         </span>
       </div>
+      {predictionRequest && (
+        <div className="timeline-window-labels" aria-label="实验时间范围">
+          <span>
+            HISTORY F{predictionRequest.observation_start}–
+            {predictionRequest.observation_start + predictionRequest.observations - 1}
+          </span>
+          <span className="prediction-ink">
+            PREDICTION F{predictionRequest.observation_start + predictionRequest.observations}–
+            {predictionRequest.observation_start +
+              predictionRequest.observations +
+              predictionRequest.horizon -
+              1}
+          </span>
+        </div>
+      )}
       <div className="timeline-track">
+        {predictionRequest && (
+          <div className="timeline-ranges" aria-hidden="true">
+            <span
+              className="history-range"
+              style={{
+                left: `${(predictionRequest.observation_start / Math.max(1, last)) * 100}%`,
+                width: `${((predictionRequest.observations - 1) / Math.max(1, last)) * 100}%`,
+              }}
+            />
+            <span
+              className="prediction-range"
+              style={{
+                left: `${((predictionRequest.observation_start + predictionRequest.observations) / Math.max(1, last)) * 100}%`,
+                width: `${((predictionRequest.horizon - 1) / Math.max(1, last)) * 100}%`,
+              }}
+            />
+          </div>
+        )}
         <div className="qc-track" aria-hidden="true">
           {invalidFrames.map((i) => (
             <i key={i} style={{ left: `${last ? (i / last) * 100 : 0}%` }} />

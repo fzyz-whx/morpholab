@@ -28,11 +28,7 @@ class WorkbenchFiles(StaticFiles):
         try:
             return await super().get_response(path, scope)
         except HTTPException as error:
-            if (
-                error.status_code == 404
-                and not normalized.startswith("api/")
-                and "." not in path
-            ):
+            if error.status_code == 404 and not normalized.startswith("api/") and "." not in path:
                 return await super().get_response("index.html", scope)
             raise
 

@@ -11,7 +11,7 @@ export interface Dataset {
   frame_count: number | null;
   local_available: boolean;
   annotation_type: string;
-  model_status: 'untrained';
+  model_status: string;
 }
 export interface Sequence {
   id: string;
@@ -36,8 +36,12 @@ export interface SequenceDetail extends Sequence {
 export type Layer = 'observed' | 'annotation' | 'overlay';
 export const PRIMARY_DATASET = 'drosophila_wound_zenodo_7660424';
 
-async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
-  const response = await fetch(`/api/v1${path}`, { signal });
+export async function request<T>(
+  path: string,
+  signal?: AbortSignal,
+  init?: RequestInit,
+): Promise<T> {
+  const response = await fetch(`/api/v1${path}`, { ...init, signal });
   if (!response.ok) {
     const body: unknown = await response.json().catch(() => null);
     const message =
