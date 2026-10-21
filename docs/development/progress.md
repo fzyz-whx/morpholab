@@ -88,3 +88,10 @@
 - CI触发入口提交 `9db8b2ebcd689fa6bee301bf1f1c6ade55e96f22` 已即时push、SHA核对，手动运行记录为[39622030041](https://github.com/fzyz-whx/morpholab/actions/runs/39622030041)，结果待单独核验。
 - 实现Persistence/恒速几何预测、派生区域与边界指标、完整源CLI、安全NPZ/分组校验、统一最长H窗口、序列等权汇总与失败案例；33项针对性测试通过，6个重点源模块mypy通过。
 - 提交前曾运行dirty validation pilot；不将其称为对应Git commit的可复现实验。代码同步后立即从干净工作树运行正式validation，test不参与选模。
+
+## M3 环境与协议冻结 · 2026-10-21
+
+- M1新增前端、Ubuntu和Windows三项[远端CI 39622030041](https://github.com/fzyz-whx/morpholab/actions/runs/39622030041)均实际成功，M1验收通过。
+- 基线实现提交 `bd3703294b679b9c140f18658e624162f3485e7e` 已即时push核对；从干净工作树运行正式validation，run记录dirty=false、完整清单、12序列/103窗口/4排除，报告待审查。
+- ADR-0002冻结共同历史摘要、NCA/ConvGRU及单一惩罚消融，3seeds与600步预算，不查看test分数调参。
+- 可选CPU/CUDA及报告依赖锁定；独立CPU环境已实际导入Torch2.11.0+cpu与Matplotlib并完成模型/恢复fixture。基础审计/浏览不需要Torch。CUDA 12.8轮子仍在本机下载，此时不声称GPU训练可用。
