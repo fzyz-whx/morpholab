@@ -14,7 +14,7 @@
 
 | 阶段 | 当前状态 | 可检查的交付 |
 |---|---|---|
-| M-1 仓库启动 | 进行中 | 项目章程、愿景、路线图、工作协议 |
+| M-1 仓库启动 | 进行中 | 公开仓库、项目章程、工作协议、离线质量工具 |
 | M0 数据与相关工作审计 | 待开始 | 下载、校验、标签语义与许可报告 |
 | M1 设计系统与真实数据浏览 | 未实现 | 无产品截图 |
 | M2–M4 数据管线、模型与实验 | 未实现 | 未训练、未评估 |
@@ -46,7 +46,16 @@ flowchart LR
 - [总任务书 v0.2](docs/project/master-plan-v0.2.md)：完整研发契约。
 - [质量规范](docs/development/quality.md)与 [Git 工作协议](docs/development/git-workflow.md)。
 
-本机已核对 Python 3.12.10、Node 24.18.0、uv 0.11.3、pnpm 11.22.0。安装和运行命令会在实际执行通过后加入；目前无需安装训练依赖，也不需要 GPU 或商业模型 API。
+本机已核对 Python 3.12.10、Node 24.18.0、uv 0.11.3、pnpm 11.22.0。以下 CPU 命令已执行；当前无需安装 PyTorch 或使用商业模型 API：
+
+```sh
+uv sync --locked --python 3.12
+uv run --locked python scripts/check_docs.py
+uv run --locked pytest -q tests/test_check_docs.py tests/test_verify_remote.py
+uv run --locked mypy
+```
+
+公开仓库检查会验证本地文档链接并拦截部分敏感文件模式；它不能替代人工许可和秘密审查。远端同步可运行 `uv run --locked python scripts/verify_remote.py` 实时核对，不以缓存的 origin 状态代替。
 
 ## 数据、许可与参考
 
