@@ -2092,6 +2092,100 @@ td:first-child {
   padding: 5px 8px;
   font-size: 12px;
 }
+.research-protocol {
+  padding: 18px 20px;
+  margin-bottom: 30px;
+  border-left: 2px solid var(--accent);
+  background: var(--surface);
+}
+.research-protocol p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.research-chart-section .section-topline {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.research-metric-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.research-chart-scroll {
+  overflow-x: auto;
+  margin: 16px 0;
+}
+.research-chart {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  height: auto;
+}
+.research-chart text {
+  fill: var(--muted);
+  font:
+    11px Consolas,
+    monospace;
+}
+.research-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.research-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.research-legend i {
+  width: 20px;
+  border-top: 2px solid;
+}
+.research-legend > span:nth-child(n + 3) i {
+  border-top-style: dashed;
+}
+.research-results {
+  margin-top: 24px;
+}
+.research-results caption {
+  text-align: left;
+  padding: 12px 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.research-provenance {
+  margin-top: 36px;
+}
+.research-provenance h2 {
+  margin-bottom: 16px;
+}
+.research-provenance details {
+  border-top: 1px solid var(--border);
+  padding: 16px 0;
+  font-size: 12px;
+}
+.research-provenance summary {
+  cursor: pointer;
+  color: var(--accent);
+}
+.research-provenance summary .mono {
+  color: var(--muted);
+  margin-left: 12px;
+}
+.research-provenance dl > div {
+  margin-top: 12px;
+}
+.research-provenance dd {
+  overflow-wrap: anywhere;
+  margin-top: 4px;
+}
 .research-run-section,
 .research-failure-section {
   margin-top: 48px;
@@ -2186,7 +2280,10 @@ td:first-child {
   font-size: 12px;
   margin-top: 12px;
 }
-.research-failure > img {
+.research-failure > a {
+  display: block;
+}
+.research-failure img {
   display: block;
   width: 100%;
   height: auto;

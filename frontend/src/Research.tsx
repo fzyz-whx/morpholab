@@ -153,7 +153,9 @@ export default function Research() {
                   </select>
                 </label>
               </div>
-              <ResearchChart reports={reports} metric={metric} />
+              <div className="research-chart-scroll">
+                <ResearchChart reports={reports} metric={metric} />
+              </div>
               <div className="research-legend">
                 {reports.map((report, index) => (
                   <span key={report.id}>

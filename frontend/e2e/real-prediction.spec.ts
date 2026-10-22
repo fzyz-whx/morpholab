@@ -77,6 +77,11 @@ test('real frozen research report exposes all leads and actual seed counts', asy
   await page.goto('/research');
   await expect(page.getByRole('img', { name: /随 lead 变化/ })).toBeVisible();
   await expect(page.locator('.research-chart [data-model-id]')).toHaveCount(6);
+  await expect(page.locator('.research-chart text').first()).toHaveCSS(
+    'fill',
+    'rgb(145, 165, 168)',
+  );
+  await expect(page.locator('.research-legend')).toHaveCSS('display', 'flex');
   await expect(page.locator('.research-results').first().locator('tbody tr')).toHaveCount(18);
   await expect(page.locator('.research-run-section tbody tr')).toHaveCount(12);
   await expect(page.locator('.research-failure img')).toHaveCount(6);
