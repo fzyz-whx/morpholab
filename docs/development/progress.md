@@ -143,3 +143,14 @@
 - 安全权重安装/打包提交`666c05b0f15a9714b6afc7008c7ffb7901207085`立即push核对。固定ZIP2,685,719字节、39成员、12best；7项安装fixture通过，不含原始显微影像。
 - 从公开仓库全新clone、独立venv/node_modules安装和构建，268 passed/1 skip；CPU正式重评全部test主表及敏感性71.578秒，主表全部聚合指标与原CUDA差0。
 - 新克隆完整12run复训已单独启动，仍在运行；原始模型与正式报告未覆盖。发布与最终验收尚未完成，不预写完成状态。
+
+## M7 复现完成与真实链加固 · 2026-10-22
+
+- 双语首页、原创架构图、真截图/结果图、引用/贡献/FAQ提交`5da64d813f73abd6e3694f682e143e8cf3ecc80e`已立即push/liveSHA核对，CI三项成功。
+- 独立干净克隆源码666c05b的12×600步CUDA复训全部完成，674.371秒；best全部模型张量、逐步数值history、best step与validation loss均与原run相同。计时不同，Git/元信息不同导致checkpoint文件hash不同；完整逐run证明公开。
+- 克隆重新audit/prepare全量源数据，manifest hash一致。ZIP为已核验源文件的NTFS硬链接，download实际报告cached=true并刷新官方元数据；不称二次公网下载。
+- 提交`ba3a48c5db4c402470e9a98126c2b9a76fe84035`立即push/liveSHA核对：Pydantic/OpenAPI到生成TS合同、独立PNG与实验详情、实现来源、Research完整预算/失败图、坐标/前帧参照、Windows原子写重试与有界worker监护。
+- 新增检查后Python302 passed/1 skip，组件14 passed、真实E2E6 passed；真实终止running worker后同job恢复成功，24帧完整。CI39746878777三项成功。
+- 主代理实看实际Research截图发现SVG黑字/图例拥挤，修复`2540f108ba009c2550d5e0afcf180d0d7b844b9e`立即push/liveSHA核对；含样式断言的真实E2E6 passed，11.1秒正常退出。科学计算未变。
+- 独立CPU克隆在ba3a48c完整测试302 passed/1 skip、Ruff/格式/mypy/OpenAPI/文档与前端14组件/构建均通过。最终tag、精确head CI、公网权重下载和源码干净身份另写Release验收附件，不提前当作已完成。
+- 该克隆fast-forward至2540f10，以自己的数据/模型启动独立API与worker，真实E2E6 passed（12.1秒）、synthetic fixture1 passed（2.0秒）；真实24帧作业来源Git与HEAD一致且dirty=false。最终Release将追加tag版本的同类核验。

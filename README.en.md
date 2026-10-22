@@ -2,13 +2,13 @@
 
 [中文](README.md) · [Results](docs/research/results.md) · [Model card](docs/research/model-card.md)
 
-MorphoLab is a local research workbench for wound-closure morphodynamics in real microscopy time series. It connects an audited public dataset, traceable preprocessing, classical baselines, independently implemented neural cellular automata and ConvGRU models, and persistent prediction jobs.
+MorphoLab is a local research workbench for wound-closure morphodynamics in real microscopy time series. It connects an audited public dataset, traceable preprocessing, classical baselines, independently implemented neural cellular automata and ConvGRU models, and persistent prediction jobs. Version **0.1.0 is a research prototype**; see the [GitHub release](https://github.com/fzyz-whx/morpholab/releases/tag/v0.1.0) for publication and asset verification.
 
 The domain is **in vivo Drosophila embryonic laser wounds**. The task is **historical annotation-conditioned shape forecasting**, not automatic microscopy segmentation, future texture generation, clinical wound assessment, or biological intervention discovery. Computational grid states are not biological cells.
 
 ![Actual forecasting workbench](assets/screenshots/studio-prediction-v1.png)
 
-Real Edge screenshot, WH01: four observed annotation frames condition a 24-step shape forecast. The grayscale background is always an actual OBSERVED frame. Solid pale contours are source ANNOTATION; dashed amber contours are PREDICTION. Source: Backová et al., [Zenodo 7660424](https://doi.org/10.5281/zenodo.7660424), CC BY 4.0. Display contrast, magnification and overlays are modified. [Attribution](datasets/ATTRIBUTION.md).
+Real Edge screenshot, WH01: four observed annotation frames condition a 24-step shape forecast. WH01 is a training sequence: this illustrates the software workflow, not generalization. The grayscale background is always an actual OBSERVED frame. Solid pale contours are source ANNOTATION; dashed amber contours are PREDICTION. Source: Backová et al., [Zenodo 7660424](https://doi.org/10.5281/zenodo.7660424), CC BY 4.0. Display contrast, magnification and overlays are modified. [Attribution](datasets/ATTRIBUTION.md).
 
 ## Evidence, including negative results
 
@@ -64,6 +64,8 @@ uv run --locked --extra cpu --extra reports python scripts/report_forecasts.py -
 ```
 
 Use a new matrix directory if pretrained weights already occupy the default path, and pass that directory with `--matrix-root` when evaluating. Formal runs require clean source and full Git history. CUDA is optional and mutually exclusive with the CPU extra. Test must be chosen explicitly; validation is the evaluation CLI default. See [acceptance evidence](docs/development/acceptance.md) for actual execution boundaries.
+
+A separate clone retrained all 12 runs in 674.371 seconds on the same CUDA device: every best-model tensor and numerical training-history field matched, excluding timing. CPU re-evaluation of the original weights matched all seven metrics across the 144 main aggregate rows. Checkpoint files have different hashes because their Git and run metadata differ. These observations are not a promise of bitwise agreement on arbitrary hardware.
 
 The NCA uses fixed local identity/Sobel/Laplacian perception, a shared learned update and 16 state channels (14,622 parameters). The 18,417-parameter ConvGRU receives the same history summary. The models never receive future targets during rollout.
 

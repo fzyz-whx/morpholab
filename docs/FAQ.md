@@ -64,3 +64,19 @@ MORPHOLAB_ARTIFACTS_ROOT=/path/to/verified-artifacts uv run --locked --extra cpu
 选新训练/评价输出目录，提交并同步源码后再运行。默认评价validation，test必须显式指定。
 公开报告生成器会写指定目标；探索结果应明确传`--output`、`--markdown`和`--figures`到忽略目录。
 新硬件或代码的Git/环境/hash不同，应作为新运行记录，不能修改原始元信息伪装成同一次实验。
+
+## 本机已有Git全局HTTPS→SSH改写，clone或push被错误的deploy key拒绝？
+
+本次环境实际遇到此问题。没有改用户全局配置；独立克隆使用只作用于这条命令的更具体URL映射：
+
+```sh
+git -c url.https://github.com/fzyz-whx/morpholab.insteadOf=https://github.com/fzyz-whx/morpholab clone https://github.com/fzyz-whx/morpholab.git
+```
+
+已有本仓库使用同样键的`git config --local`映射。通常环境不需要这项；应先查看实际Git错误和改写来源，不要重新生成或粘贴Token。
+
+## 改源码后，新任务提示实现身份不匹配？
+
+服务器启动时记录关键文件hash和运行版本，worker执行前再次核对。源码变动期间不能混用旧服务器和新worker。
+完成并提交修改后重启本项目的`scripts/serve.py`；已有历史结果保留自己的来源，旧结果缺来源时明确未知。
+监护器会在自有worker真正退出后有界重启；连续崩溃超过预算会停止并报告，不无限循环掩盖故障。

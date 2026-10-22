@@ -1,0 +1,118 @@
+{
+  "schema_version": "morpholab-reproduction-v1",
+  "original_git_sha": "056332d083de1527e49342772ecf2ef974813959",
+  "reproduction_git_sha": "666c05b0f15a9714b6afc7008c7ffb7901207085",
+  "reproduction_git_dirty": false,
+  "runs": [
+    {
+      "run_id": "nca_seed17",
+      "model_tensors_identical": true,
+      "numerical_history_excluding_timing_identical": true,
+      "best_step_identical": true,
+      "validation_loss_identical": true,
+      "reproduction_best_sha256": "ac241abbf0425f536c3d120533c114574b0fc486c0235d0200e4fc537adea78c",
+      "elapsed_seconds": 66.42199999999139
+    },
+    {
+      "run_id": "nca_seed29",
+      "model_tensors_identical": true,
+      "numerical_history_excluding_timing_identical": true,
+      "best_step_identical": true,
+      "validation_loss_identical": true,
+      "reproduction_best_sha256": "11084edc6ab4ad1fde6d48d7e6aae8ff1bda61ed61b330783fbe20f2f6114612",
+      "elapsed_seconds": 48.96799999999348
+    },
+    {
+      "run_id": "nca_seed43",
+      "model_tensors_identical": true,
+      "numerical_history_excluding_timing_identical": true,
+      "best_step_identical": true,
+      "validation_loss_identical": true,
+      "reproduction_best_sha256": "16b84e1185e8c28728dee71cf08db72fd324cf94d17764e4c21bac4fb8c9865a",
+      "elapsed_seconds": 48.8119999999908
+    },
+    {
+      "run_id": "nca_regularized_seed17",
+      "model_tensors_identical": true,
+      "numerical_history_excluding_timing_identical": true,
+      "best_step_identical": true,
+      "validation_loss_identical": true,
+      "reproduction_best_sha256": "1d763cf15e2e457cd3b6eb42b90f47222e43b80a9263a5210041cda6d425d6b9",
+      "elapsed_seconds": 49.07799999999406
+    },
+    {
+      "run_id": "nca_regularized_seed29",
+      "model_tensors_identical": true,
+      "numerical_history_excluding_timing_identical": true,
+      "best_step_identical": true,
+      "validation_loss_identical": true,
+      "reproduction_best_sha256": "8286b1224f6d7acb3083d6e181c17c4e6403d6459f397612a9814f8a3a34f4ba",
+      "elapsed_seconds": 49.15600000000268
+    },
+    {
+      "run_id": "nca_regularized_seed43",
+      "model_tensors_identical": true,
+      "numerical_history_excluding_timing_identical": true,
+      "best_step_identical": true,
+      "validation_loss_identical": true,
+      "reproduction_best_sha256": "2aaad3673fb3d0c50ce140857598dc3d9ac9326ee17b9157f2a9d81323667ab2",
+      "elapsed_seconds": 49.21799999999348
+    },
+    {
+      "run_id": "convgru_seed17",
+      "model_tensors_identical": true,
+      "numerical_history_excluding_timing_identical": true,
+      "best_step_identical": true,
+      "validation_loss_identical": true,
+      "reproduction_best_sha256": "f0f38c035534c23053a6fe509733fd785809000b6afe78e47acd506ff616b22e",
+      "elapsed_seconds": 90.28100000000268
+    },
+    {
+      "run_id": "convgru_seed29",
+      "model_tensors_identical": true,
+      "numerical_history_excluding_timing_identical": true,
+      "best_step_identical": true,
+      "validation_loss_identical": true,
+      "reproduction_best_sha256": "07d5cfe5d35289fe76abb04928c900118bab365325e0e1cc2ff3184b2d129608",
+      "elapsed_seconds": 90.625
+    },
+    {
+      "run_id": "convgru_seed43",
+      "model_tensors_identical": true,
+      "numerical_history_excluding_timing_identical": true,
+      "best_step_identical": true,
+      "validation_loss_identical": true,
+      "reproduction_best_sha256": "9af367c9207fb6154179699c941699eb314e5db6dc516c12a1b620b86f9072fe",
+      "elapsed_seconds": 92.0
+    },
+    {
+      "run_id": "nca_h1_seed17",
+      "model_tensors_identical": true,
+      "numerical_history_excluding_timing_identical": true,
+      "best_step_identical": true,
+      "validation_loss_identical": true,
+      "reproduction_best_sha256": "58677407ea49dd93d131aa92761289c7b91627dfa065f4f4a412ce53bf17b76d",
+      "elapsed_seconds": 30.421000000002095
+    },
+    {
+      "run_id": "nca_h1_seed29",
+      "model_tensors_identical": true,
+      "numerical_history_excluding_timing_identical": true,
+      "best_step_identical": true,
+      "validation_loss_identical": true,
+      "reproduction_best_sha256": "da64718bcbc5b749b45c686f40581c0300a6be8cf319384c3bb54c269383b708",
+      "elapsed_seconds": 29.875
+    },
+    {
+      "run_id": "nca_h1_seed43",
+      "model_tensors_identical": true,
+      "numerical_history_excluding_timing_identical": true,
+      "best_step_identical": true,
+      "validation_loss_identical": true,
+      "reproduction_best_sha256": "b2c33623174bc8efff0105a469a7ad4e0f821deb7fa0b561bdf7530861293d41",
+      "elapsed_seconds": 29.514999999999418
+    }
+  ],
+  "total_training_seconds": 674.3709999999701,
+  "note": "Timing differs. Checkpoint file hashes differ because Git and metadata differ; tensors and all per-step numerical history fields were compared separately."
+}

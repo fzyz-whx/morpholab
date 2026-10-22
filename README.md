@@ -4,11 +4,11 @@
 
 研究真实显微时序中的创面闭合：给定历史轮廓，局部神经更新规则能否预测后续形态？
 
-MorphoLab 是一个可在本机运行的科研工作台，也是一组可复算的对照实验。它连接真实数据审计、严格的派生标签管线、经典基线、自主实现的 NCA 与 ConvGRU，以及带来源和失败记录的预测作业。当前版本为 **0.1.0 研究原型**，发布验收进行中。
+MorphoLab 是一个可在本机运行的科研工作台，也是一组可复算的对照实验。它连接真实数据审计、严格的派生标签管线、经典基线、自主实现的 NCA 与 ConvGRU，以及带来源和失败记录的预测作业。当前版本为 **0.1.0 研究原型**，数据、研究与工作台闭环已验证；版本和资产状态见 [GitHub Release](https://github.com/fzyz-whx/morpholab/releases/tag/v0.1.0)。
 
 ![真实NCA预测工作台](assets/screenshots/studio-prediction-v1.png)
 
-实际 Edge、1440×900，WH01 历史 F0–3 → 预测 F4–27。灰度始终是 **OBSERVED** 原帧；浅色线是发布者 **ANNOTATION**，琥珀虚线是 **PREDICTION**。未来显微纹理没有由网络生成。影像来自 Backová 等（2023），[Zenodo 7660424](https://doi.org/10.5281/zenodo.7660424)，CC BY 4.0；修改包括对比度映射、放大、派生目标及预测叠加。[完整署名](datasets/ATTRIBUTION.md)。
+实际 Edge、1440×900，WH01 历史 F0–3 → 预测 F4–27。WH01 属于 train，此图展示软件流程，不是泛化证据。灰度始终是 **OBSERVED** 原帧；浅色线是发布者 **ANNOTATION**，琥珀虚线是 **PREDICTION**。未来显微纹理没有由网络生成。影像来自 Backová 等（2023），[Zenodo 7660424](https://doi.org/10.5281/zenodo.7660424)，CC BY 4.0；修改包括对比度映射、放大、派生目标及预测叠加。[完整署名](datasets/ATTRIBUTION.md)。
 
 ## 研究了什么
 
@@ -94,7 +94,7 @@ uv run --locked --extra cpu --extra reports python scripts/report_forecasts.py -
 
 训练与评价要求干净源码、完整 Git 历史、完整数据。若已安装发布权重，重新训练时选择另一新输出目录，并在评价时用 `--matrix-root` 指定它。默认评价 split 是 validation；正式 test 需要显式 `--split test`。`scripts/evaluate.py`可独立复现两个经典基线。
 
-兼容 NVIDIA 环境可把 `cpu` extra 与训练/评价 device 换为 `cuda`；两种 extra 互斥。正式 12 次训练使用 RTX 5060 Laptop、IEEE fp32，实际运行时间合计 676.422 秒；CPU 支持路径与实测证据见[验收记录](docs/development/acceptance.md)。不承诺其他机器运行时间或跨硬件逐位相同。
+兼容 NVIDIA 环境可把 `cpu` extra 与训练/评价 device 换为 `cuda`；两种 extra 互斥。正式 12 次训练使用 RTX 5060 Laptop、IEEE fp32，实际运行时间合计 676.422 秒。独立克隆完整复训 12 次、合计 674.371 秒，模型张量和逐步数值记录一致；CPU 对原权重复算主表 144 行、七项指标的最大差为 0。[验收记录](docs/development/acceptance.md)保留源码与环境边界；不承诺其他机器运行时间或跨硬件逐位相同。
 
 ## 数据与证据边界
 
@@ -115,7 +115,7 @@ GigaDB 100118 是不同域的体外划痕次级来源，未混入本域分数；
 | M3 / M4 | 12 次真实训练、冻结 test 对照与两项消融已完成 |
 | M5 | 持久预测 API、真实工作台与完整浏览器链已通过 |
 | M6 | 按 [ADR-0004](docs/project/decisions/ADR-0004-defer-control-and-bound-reliability.md) 降级为预测敏感性分析，不提供未验证虚拟控制 |
-| M7 | 新克隆、发布与文档验收进行中 |
+| M7 | 独立克隆、CPU 复算、全矩阵复训、文档和 CI 已验证；最终 tag/公网资产核验见 Release 附件 |
 
 常用质量检查：
 
