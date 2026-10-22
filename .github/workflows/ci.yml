@@ -32,6 +32,7 @@ jobs:
       - if: runner.os == 'Linux'
         run: uv run --locked --extra cpu --extra reports mypy ml/morpholab_ml/models/forecast.py
       - run: uv run --locked python scripts/check_docs.py
+      - run: uv run --locked python scripts/export_openapi.py --check
 
   frontend:
     runs-on: ubuntu-latest
@@ -52,6 +53,7 @@ jobs:
       - run: pnpm lint
       - run: pnpm format:check
       - run: pnpm typecheck
+      - run: pnpm api:check
       - run: pnpm test
       - run: pnpm build
       - run: pnpm exec playwright install --with-deps chromium

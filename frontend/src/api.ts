@@ -1,38 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 
-export interface Dataset {
-  id: string;
-  name: string;
-  biology_domain: string;
-  source_url: string;
-  doi: string | null;
-  license: string | null;
-  sequence_count: number | null;
-  frame_count: number | null;
-  local_available: boolean;
-  annotation_type: string;
-  model_status: string;
-}
-export interface Sequence {
-  id: string;
-  dataset_id: string;
-  frame_count: number;
-  width: number;
-  height: number;
-  project_split: string | null;
-  official_split: string | null;
-  qc_valid_count: number;
-  qc_definition?: string;
-}
-export interface Frame {
-  frame_index: number;
-  timestamp_min: number | null;
-  qc_valid: boolean;
-  touches_border: boolean;
-}
-export interface SequenceDetail extends Sequence {
-  frames: Frame[];
-}
+import type { components } from './generated/api';
+
+export type Dataset = components['schemas']['DatasetRecord'];
+export type Sequence = components['schemas']['SequenceRecord'];
+export type Frame = components['schemas']['FrameRecord'];
+export type SequenceDetail = components['schemas']['SequenceEnvelope'];
 export type Layer = 'observed' | 'annotation' | 'overlay';
 export const PRIMARY_DATASET = 'drosophila_wound_zenodo_7660424';
 

@@ -1,11 +1,14 @@
 """SYNTHETIC fixtures: persistent job mechanics, never real-data E2E acceptance."""
 
+import hashlib
+import io
 import json
 
 import numpy as np
 import pytest
 from fastapi.testclient import TestClient
 from morpholab_ml.evaluation.runner import file_sha256
+from PIL import Image
 
 from backend.app import prediction
 from backend.app.data import PRIMARY_DATASET
@@ -29,7 +32,7 @@ def prepared(tmp_path, monkeypatch):
     valid[6] = False
     arrays = {"working_sdf": sdf, "working_region": sdf > 0, "valid": valid}
     manifest = {
-        "source_archive": {"source_id": "synthetic", "sha256": "a" * 64},
+        "source_archive": {"source_id": "zenodo:7660424", "sha256": "a" * 64},
         "sequences": [
             {
                 "sequence_id": "WH01",
@@ -78,13 +81,30 @@ def test_persisted_queue_worker_result_and_future_qc(prepared):
     assert [f["target_valid"] for f in result["frames"]] == [True, False, True]
     assert result["frames"][0]["metrics"]["iou"] > 0
     assert result["frames"][1]["metrics"] is None
-    assert result["frames"][1]["target_region"] is None
-    assert np.asarray(result["frames"][0]["region"]).shape == (64, 64)
+    assert result["frames"][1]["images"]["target"] is None
+    assert result["frames"][1]["target_area"] is None
+    assert "region" not in result["frames"][0] and "target_region" not in result["frames"][0]
+    image = client.get(result["frames"][0]["images"]["prediction"]["url"])
+    assert image.status_code == 200 and Image.open(io.BytesIO(image.content)).size == (64, 64)
+    assert (
+        hashlib.sha256(image.content).hexdigest()
+        == result["frames"][0]["images"]["prediction"]["sha256"]
+    )
+    assert "immutable" in image.headers["cache-control"]
+    assert client.get(f"/api/v1/jobs/{job['id']}/frames/2?layer=target").status_code == 404
+    assert client.get(f"/api/v1/jobs/{job['id']}/frames/25").status_code == 422
+    assert client.get(f"/api/v1/jobs/{job['id']}/frames/1?layer=../../private").status_code == 422
     assert result["frames"][0]["contours"]
-    assert result["provenance"] == "PREDICTION"
+    assert result["provenance"] == "MODEL_PREDICTION"
     assert result["source"]["project_split"] == "test"
+    assert result["implementation"]["files_sha256"]
+    assert "python" in result["implementation"]["environment"]
     assert str(root) not in json.dumps(result)
     assert len(client.get("/api/v1/experiments").json()["items"]) == 1
+    assert client.get(f"/api/v1/experiments/{job['id']}").json()["job"]["id"] == job["id"]
+    path = app.state.queue.directory / "results" / job["id"] / "lead-1-prediction.png"
+    path.write_bytes(b"corrupt image cache")
+    assert client.get(result["frames"][0]["images"]["prediction"]["url"]).status_code == 503
 
 
 @pytest.mark.parametrize(
@@ -212,6 +232,7 @@ def test_trained_validation_selection_and_safe_checkpoint(prepared, kind):
     failed = app.state.queue.get(damaged["id"])
     assert failed["status"] == "failed"
     assert failed["error"]["type"] == "ValueError"
+    assert failed["error"]["code"] == "CHECKPOINT_HASH_MISMATCH"
     assert str(artifacts) not in json.dumps(failed["error"])
 
 

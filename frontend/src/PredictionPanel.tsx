@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { request } from './api';
+import { PRIMARY_DATASET, request } from './api';
 import type { SequenceDetail } from './api';
 import { QueryState } from './components';
 import {
@@ -37,7 +37,7 @@ export default function PredictionPanel({
   const experiments = useExperiments();
   const client = useQueryClient();
   const [modelId, setModelId] = useState('');
-  const [observations, setObservations] = useState(4);
+  const [observations, setObservations] = useState<PredictionRequest['observations']>(4);
   const [horizon, setHorizon] = useState(12);
   const [start, setStart] = useState(0);
   const [jobId, setJobId] = useState<string | null>(null);
@@ -111,7 +111,7 @@ export default function PredictionPanel({
             if (!selectedModel || !validWindow || busy) return;
             onClear();
             submit.mutate({
-              dataset_id: sequence.dataset_id,
+              dataset_id: PRIMARY_DATASET,
               sequence_id: sequence.id,
               model_id: selectedModel.id,
               observation_start: start,
@@ -151,7 +151,10 @@ export default function PredictionPanel({
                 aria-label="观测帧数"
                 value={observations}
                 disabled={busy}
-                onChange={(event) => setObservations(Number(event.target.value))}
+                onChange={(event) => {
+                  const value = Number(event.target.value);
+                  if (value === 2 || value === 4 || value === 8) setObservations(value);
+                }}
               >
                 {[2, 4, 8].map((n) => (
                   <option key={n} value={n}>
@@ -335,6 +338,21 @@ export function PredictionMetrics({
             预测面积 {current.region_area} grid px²；{result.grid.width} × {result.grid.height}{' '}
             工作网格。
           </p>
+          {(current.region_area === 0 ||
+            current.region_area === result.grid.width * result.grid.height) && (
+            <p className="window-warning">
+              预测{current.region_area === 0 ? '为空区域' : '覆盖整个工作网格'}
+              ；请结合目标有效性和边界指标解释。
+            </p>
+          )}
+          <a
+            className="text-link"
+            href={current.images.prediction.url}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            查看64网格预测区域 PNG ↗
+          </a>
           {current.metrics && current.target_valid ? (
             <dl>
               {Object.entries(metricLabels).map(([key, label]) => (
@@ -366,11 +384,7 @@ export function PredictionMetrics({
             {
               label: 'DERIVED TARGET',
               color: '#D4DCA5',
-              values: result.frames.map((f) =>
-                f.metrics?.signed_area_error == null
-                  ? null
-                  : f.region_area - f.metrics.signed_area_error,
-              ),
+              values: result.frames.map((f) => f.target_area),
             },
           ]}
         />
@@ -396,6 +410,26 @@ export function PredictionMetrics({
           <div>
             <dt>模型</dt>
             <dd>{result.request.model_id}</dd>
+          </div>
+          <div>
+            <dt>模型源码 Git / seed</dt>
+            <dd>
+              {result.model.model_git_sha ?? '确定性基线无训练源码'} /{' '}
+              {result.model.seed ?? '无随机训练'}
+            </dd>
+          </div>
+          <div>
+            <dt>推理设备 / 精度</dt>
+            <dd>
+              {result.device} / {result.precision}
+            </dd>
+          </div>
+          <div>
+            <dt>执行源码 Git</dt>
+            <dd>
+              {result.implementation?.git_sha ?? '此历史作业未记录'}
+              {result.implementation?.git_dirty ? ' · 有未提交变更' : ''}
+            </dd>
           </div>
           <div>
             <dt>Checkpoint SHA256</dt>

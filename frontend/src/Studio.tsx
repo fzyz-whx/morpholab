@@ -18,6 +18,9 @@ export default function Studio() {
   const sequence = useSequence(sequenceId);
   return (
     <main id="main" className="studio-page">
+      <p className="desktop-workbench-note">
+        完整形态实验建议使用至少1280px宽的桌面窗口。移动端可阅读来源、序列元信息与研究记录。
+      </p>
       <QueryState
         pending={sequence.isPending}
         error={sequence.error}
@@ -42,6 +45,12 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [showPrediction, setShowPrediction] = useState(true);
   const [showError, setShowError] = useState(false);
+  const [showPrevious, setShowPrevious] = useState(false);
+  const [coordinates, setCoordinates] = useState<{ x: number; y: number; key: string } | null>(
+    null,
+  );
+  const coordinateKey = `${frame}-${layer}-${manualZoom}-${viewportSize.width}-${viewportSize.height}`;
+  const activeCoordinates = coordinates?.key === coordinateKey ? coordinates : null;
   const predictedFrame = prediction?.frames.find((item) => item.source_frame_index === frame);
   const receivePrediction = useCallback((result: PredictionResult) => {
     setPrediction(result);
@@ -199,6 +208,21 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
                 </button>
               ))}
             </div>
+            <button
+              className="previous-frame-toggle"
+              disabled={frame === 0}
+              aria-pressed={showPrevious && frame > 0}
+              onClick={() => setShowPrevious(!showPrevious)}
+            >
+              前帧参照
+            </button>
+            {showPrevious && frame > 0 && (
+              <PreviousFrame
+                key={`${sequence.id}-${frame - 1}`}
+                sequenceId={sequence.id}
+                frame={frame - 1}
+              />
+            )}
           </div>
           <div className="sidebar-section sequence-section">
             <div className="section-topline">
@@ -269,7 +293,10 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
             tabIndex={0}
             aria-label="影像画布，方向键逐帧，空格播放，Home和End跳转首尾"
           >
-            <span className="viewport-coordinate coord-top">X 000 / Y 000</span>
+            <output className="viewport-coordinate coord-top" aria-label="原始图像坐标">
+              X {activeCoordinates ? String(activeCoordinates.x).padStart(3, '0') : '—'} / Y{' '}
+              {activeCoordinates ? String(activeCoordinates.y).padStart(3, '0') : '—'}
+            </output>
             <FrameImage
               key={`${sequence.id}-${frame}-${layer}`}
               src={frameUrl(sequence.id, frame, layer)}
@@ -279,6 +306,11 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
               prediction={showPrediction ? predictedFrame : undefined}
               predictionGrid={prediction?.grid}
               showError={showError}
+              sourceWidth={sequence.width}
+              sourceHeight={sequence.height}
+              onCoordinates={(point) =>
+                setCoordinates(point ? { ...point, key: coordinateKey } : null)
+              }
             />
             <span className="viewport-coordinate coord-bottom">
               {sequence.width} × {sequence.height} PIXEL GRID
@@ -432,7 +464,7 @@ function StudioWorkspace({ sequence }: { sequence: SequenceDetail }) {
         <span>{dataset?.license ?? '许可读取中'}</span>
         <span>
           {prediction
-            ? `PREDICTION / ${prediction.request.model_id}`
+            ? `${prediction.device.toUpperCase()} / ${prediction.request.model_id} / MODEL ${prediction.model.model_git_sha?.slice(0, 7) ?? 'CLASSICAL'}`
             : '原始数据浏览 / 预测按需运行'}
         </span>
       </footer>
@@ -448,6 +480,9 @@ function FrameImage({
   prediction,
   predictionGrid,
   showError,
+  sourceWidth,
+  sourceHeight,
+  onCoordinates,
 }: {
   src: string;
   alt: string;
@@ -456,6 +491,9 @@ function FrameImage({
   prediction?: import('./prediction-api').PredictedFrame;
   predictionGrid?: { width: number; height: number };
   showError?: boolean;
+  sourceWidth: number;
+  sourceHeight: number;
+  onCoordinates: (point: { x: number; y: number } | null) => void;
 }) {
   const [state, setState] = useState<'loading' | 'loaded' | 'error'>('loading');
   const [attempt, setAttempt] = useState(0);
@@ -464,6 +502,26 @@ function FrameImage({
       <div
         className="frame-geometry"
         style={{ width, height, position: 'relative', flexShrink: 0 }}
+        onMouseMove={(event) => {
+          const rect = event.currentTarget.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          onCoordinates(
+            state === 'loaded' &&
+              rect.width > 0 &&
+              rect.height > 0 &&
+              x >= 0 &&
+              y >= 0 &&
+              x < rect.width &&
+              y < rect.height
+              ? {
+                  x: Math.floor((x / rect.width) * sourceWidth),
+                  y: Math.floor((y / rect.height) * sourceHeight),
+                }
+              : null,
+          );
+        }}
+        onMouseLeave={() => onCoordinates(null)}
       >
         <img
           className="scientific-image"
@@ -472,9 +530,19 @@ function FrameImage({
           width={width}
           height={height}
           onLoad={() => setState('loaded')}
-          onError={() => setState('error')}
+          onError={() => {
+            setState('error');
+            onCoordinates(null);
+          }}
           style={{ width, height, visibility: state === 'loaded' ? 'visible' : 'hidden' }}
         />
+        {prediction &&
+          showError &&
+          prediction.target_valid &&
+          prediction.images.error &&
+          state === 'loaded' && (
+            <ErrorImage key={prediction.images.error.url} url={prediction.images.error.url} />
+          )}
         {prediction && predictionGrid && state === 'loaded' && (
           <svg
             className="prediction-overlay"
@@ -484,27 +552,6 @@ function FrameImage({
             preserveAspectRatio="none"
           >
             <title>PREDICTION · 预测轮廓，非原始注释</title>
-            {showError &&
-              prediction.target_valid &&
-              prediction.target_region &&
-              prediction.region.flatMap((row, y) =>
-                row.flatMap((pixel, x) => {
-                  const target = prediction.target_region![y][x];
-                  return pixel === target
-                    ? []
-                    : [
-                        <rect
-                          key={`${x}-${y}`}
-                          x={x - 0.5}
-                          y={y - 0.5}
-                          width="1"
-                          height="1"
-                          fill={pixel ? '#E2B875' : '#D795AB'}
-                          opacity="0.5"
-                        />,
-                      ];
-                }),
-              )}
             {prediction.contours.map((points, index) => (
               <polyline
                 key={index}
@@ -538,6 +585,69 @@ function FrameImage({
         </div>
       )}
     </>
+  );
+}
+
+function ErrorImage({ url }: { url: string }) {
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  return (
+    <>
+      {!failed && (
+        <img
+          className="prediction-error-image"
+          src={attempt ? `${url}${url.includes('?') ? '&' : '?'}retry=${attempt}` : url}
+          alt="派生区域误差层：FP 多预测 / FN 漏预测"
+          onError={() => setFailed(true)}
+        />
+      )}
+      {failed && (
+        <div className="overlay-asset-error" role="alert">
+          误差图加载失败
+          <button
+            onClick={() => {
+              setFailed(false);
+              setAttempt(attempt + 1);
+            }}
+          >
+            重试误差图
+          </button>
+        </div>
+      )}
+    </>
+  );
+}
+
+function PreviousFrame({ sequenceId, frame }: { sequenceId: string; frame: number }) {
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  const url = frameUrl(sequenceId, frame, 'observed');
+  return (
+    <figure className="previous-frame-reference">
+      <figcaption>
+        <span>OBSERVED / 前帧参照</span>
+        <strong className="mono">F{String(frame).padStart(3, '0')}</strong>
+      </figcaption>
+      {!failed ? (
+        <img
+          src={attempt ? `${url}&retry=${attempt}` : url}
+          alt={`${sequenceId} 前一真实观测帧 ${frame}`}
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <div role="alert">
+          前帧读取失败
+          <button
+            onClick={() => {
+              setFailed(false);
+              setAttempt(attempt + 1);
+            }}
+          >
+            重试前帧
+          </button>
+        </div>
+      )}
+    </figure>
   );
 }
 

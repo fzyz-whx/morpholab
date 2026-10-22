@@ -15,6 +15,16 @@ from backend.app.main import create_app
 from scripts.audit_data import audit_archive
 
 
+def test_model_status_agrees_across_dataset_and_sequence_details(data_root, monkeypatch):
+    app = create_app(data_root)
+    monkeypatch.setattr(app.state.prediction, "registry", lambda: [{"trained": True}])
+    client = TestClient(app)
+    assert client.get("/api/v1/datasets").json()["items"][0]["model_status"] == "trained"
+    dataset_id = client.get("/api/v1/datasets").json()["items"][0]["id"]
+    assert client.get(f"/api/v1/datasets/{dataset_id}").json()["model_status"] == "trained"
+    assert client.get("/api/v1/sequences/WH01").json()["model_status"] == "trained"
+
+
 @pytest.fixture
 def data_root(tmp_path: Path) -> Path:
     archive = tmp_path / "artifacts/raw/zenodo_7660424/Dataset.zip"

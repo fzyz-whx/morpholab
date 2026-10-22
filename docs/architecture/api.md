@@ -11,6 +11,21 @@ uv run python scripts/serve.py
 
 入口固定监听 `127.0.0.1:8765`；数据根目录按源码位置解析，服务不依赖工作目录。Vite开发界面将 `/api` 代理到该地址，无需开启跨域访问。OpenAPI位于 `/docs`。神经推理需安装cpu或cuda extra；独立worker默认CPU执行，经典基线无需Torch。
 
+## 类型契约与生成文件
+
+数据目录、序列、模型注册表、作业状态和预测结果主链使用 Pydantic `response_model` 声明并校验响应；PNG资产使用独立的二进制响应。实际 FastAPI schema 由 [导出脚本](../../scripts/export_openapi.py) 保存为 [openapi.json](openapi.json)，前端 [生成脚本](../../frontend/scripts/api-types.mjs) 使用 openapi-typescript 7.13 与 TypeScript 5.9.3 生成 [api.d.ts](../../frontend/src/generated/api.d.ts)。不要手改生成文件，也不要仅修改前端类型而遗漏后端模型。
+
+变更请求或响应契约后按顺序执行：
+
+```powershell
+uv run --locked python scripts/export_openapi.py
+pnpm --dir frontend api:generate
+uv run --locked python scripts/export_openapi.py --check
+pnpm --dir frontend api:check
+```
+
+Python CI 检查导出快照是否与当前应用一致；前端 CI 检查生成类型是否与已提交的快照一致。任一侧过期都会失败。该检查确认类型产物同步，不替代真实数据、PNG资产或作业恢复验收。
+
 ## 路由与元数据
 
 | GET路由 | 内容 |
@@ -63,14 +78,23 @@ uv run python scripts/audit_data.py
 | POST `/api/v1/experiments/predict` | 严格请求校验后202入队，不在route内计算 |
 | GET `/api/v1/jobs/{id}` | 任务状态、原始请求、取消标记与安全错误 |
 | GET `/api/v1/jobs/{id}/result` | 成功结果；尚未成功409 |
+| GET `/api/v1/jobs/{id}/frames/{lead}?layer=prediction\|target\|error` | 64×64 PNG；lead为1–24且必须存在于结果中；无有效目标时target/error不可用 |
 | POST `/api/v1/jobs/{id}/cancel` | queued立即取消；running协作取消 |
 | GET `/api/v1/experiments` | 最近100个持久化任务 |
+| GET `/api/v1/experiments/{id}` | 单个持久化实验详情，与作业状态使用同一契约 |
 | GET `/api/v1/research` | 已公开冻结test报告，缺失时pending，不计算假分数 |
+| GET `/api/v1/research/figures/{name}` | 公开报告白名单内的固定PNG文件名；按报告SHA256核验内容 |
 
 请求例：`{dataset_id:"drosophila_wound_zenodo_7660424",sequence_id:"WH01",model_id:"nca",observation_start:0,observations:4,horizon:24}`。
 L仅2/4/8、H1–24，完整范围在源序列内，历史QC有效。没有可选服务器路径或任意权重参数。
-结果含逐lead原帧索引、64网格region/contour、有效未来派生目标、七项metrics（目标无效为null）、
-来源hash、选中seed/模型源码SHA/权重hash；神经预测标MODEL_PREDICTION，经典方法标PREDICTION。
+结果含逐lead原帧索引、64工作网格 `contours`、`region_area`、`target_area`、七项 `metrics`、
+`images:{prediction,target,error}`、来源hash与选中seed/权重hash。每个图像资产仅含 `url` 和 `sha256`；JSON不再返回 `region` 或 `target_region` 像素数组。未来派生目标无效时，`target_area`、`metrics`、`images.target` 与 `images.error` 均为null，但预测仍可生成。图像端点逐次核验对应PNG的SHA256，以ETag返回同一摘要；损坏资产不会作为有效结果静默返回。
+
+全部预测JSON（包括经典基线）统一 `provenance:"MODEL_PREDICTION"`，目标仍为 `target_provenance:"DERIVED_ANNOTATION"`；界面图例显示 `PREDICTION`。预测PNG、目标PNG与误差PNG的 `X-Provenance` 分别为 `MODEL_PREDICTION`、`DERIVED_ANNOTATION`、`PREDICTION_ERROR`，工作网格标记为64×64；原始灰度影像始终是OBSERVED。
+
+结果的 `implementation` 可选，旧历史记录可以为null。新任务记录执行代码的Git SHA、dirty状态、源码hash与环境，并在API入队和worker执行之间核对身份；它与模型权重hash、数据hash分别保留。修改实现文件后应重启API和worker，避免运行中的旧进程与磁盘文件混用。
+
+Research图像只接受无目录部分、以 `forecast-test-` 开头且以 `.png` 结尾的文件名，并且必须出现在公开报告的 `published_figures_sha256` 白名单中。文件读取后再次核验hash；未知文件返回404，缺失或不匹配的白名单资产返回安全错误，不开放任意目录浏览。
 完整生命周期与恢复行为见[预测作业架构](prediction-jobs.md)。
 
 ## 检查边界

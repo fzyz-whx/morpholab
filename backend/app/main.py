@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import uuid
@@ -10,11 +11,23 @@ from pathlib import Path
 from typing import Any, Literal
 
 from fastapi import FastAPI, Request
+from fastapi import Path as PathParam
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, Response
 from starlette.exceptions import HTTPException
 from starlette.staticfiles import StaticFiles
 
+from backend.app.contracts import (
+    DatasetEnvelope,
+    DatasetListEnvelope,
+    ErrorEnvelope,
+    ExperimentListEnvelope,
+    JobEnvelope,
+    ModelListEnvelope,
+    PredictionResult,
+    SequenceEnvelope,
+    SequenceListEnvelope,
+)
 from backend.app.data import PRIMARY_DATASET, RECOVERY, DataError, DataStore
 from backend.app.jobs import JobQueue, worker_ready
 from backend.app.prediction import PredictionRequest, PredictionService
@@ -105,6 +118,7 @@ def create_app(
         return envelope(
             {
                 "status": "ok" if available else "degraded",
+                "application_version": app.version,
                 "data_available": available,
                 "data_issue": issue,
                 "model_status": "trained"
@@ -115,23 +129,26 @@ def create_app(
             }
         )
 
-    @app.get("/api/v1/datasets")
-    def datasets() -> dict[str, object]:
+    def registered_datasets() -> list[dict[str, Any]]:
         items = store.datasets()
         trained = any(model["trained"] for model in prediction.registry())
         for item in items:
             if item["id"] == PRIMARY_DATASET:
                 item["model_status"] = "trained" if trained else "untrained"
-        return envelope({"items": items})
+        return items
 
-    @app.get("/api/v1/datasets/{dataset_id}")
+    @app.get("/api/v1/datasets", response_model=DatasetListEnvelope)
+    def datasets() -> dict[str, object]:
+        return envelope({"items": registered_datasets()})
+
+    @app.get("/api/v1/datasets/{dataset_id}", response_model=DatasetEnvelope)
     def dataset(dataset_id: str) -> dict[str, object]:
-        for item in store.datasets():
+        for item in registered_datasets():
             if item["id"] == dataset_id:
                 return envelope(item, dataset_id=dataset_id)
         raise DataError("DATASET_NOT_FOUND", "Dataset does not exist.", 404)
 
-    @app.get("/api/v1/sequences")
+    @app.get("/api/v1/sequences", response_model=SequenceListEnvelope)
     def sequences(dataset_id: str = PRIMARY_DATASET) -> dict[str, object]:
         return envelope(
             {"items": store.sequences(dataset_id)},
@@ -139,15 +156,25 @@ def create_app(
             provenance="REAL_OBSERVED" if dataset_id == PRIMARY_DATASET else None,
         )
 
-    @app.get("/api/v1/sequences/{sequence_id}")
+    @app.get("/api/v1/sequences/{sequence_id}", response_model=SequenceEnvelope)
     def sequence(sequence_id: str) -> dict[str, object]:
+        detail = store.sequence_detail(sequence_id)
+        detail["model_status"] = (
+            "trained" if any(m["trained"] for m in prediction.registry()) else "untrained"
+        )
         return envelope(
-            store.sequence_detail(sequence_id),
+            detail,
             dataset_id=PRIMARY_DATASET,
             provenance="REAL_OBSERVED",
         )
 
-    @app.get("/api/v1/sequences/{sequence_id}/frames/{frame_index}")
+    @app.get(
+        "/api/v1/sequences/{sequence_id}/frames/{frame_index}",
+        response_class=Response,
+        responses={
+            200: {"content": {"image/png": {"schema": {"type": "string", "format": "binary"}}}}
+        },
+    )
     def frame(
         sequence_id: str,
         frame_index: int,
@@ -175,34 +202,101 @@ def create_app(
             },
         )
 
-    @app.get("/api/v1/models")
+    @app.get("/api/v1/models", response_model=ModelListEnvelope)
     def models() -> dict[str, Any]:
         return envelope({"items": prediction.registry()})
 
-    @app.post("/api/v1/experiments/predict", status_code=202)
+    @app.post(
+        "/api/v1/experiments/predict",
+        status_code=202,
+        response_model=JobEnvelope,
+        responses={422: {"model": ErrorEnvelope}, 503: {"model": ErrorEnvelope}},
+    )
     def submit_predict(payload: PredictionRequest) -> dict[str, Any]:
         pinned = prediction.validate(payload)
         return envelope(
-            {"job": queue.submit(payload.model_dump(), pinned)},
+            {
+                "job": queue.submit(payload.model_dump(), pinned),
+                "model_id": payload.model_id,
+                "run_id": pinned["model"].get("run_id"),
+            },
             dataset_id=payload.dataset_id,
-            provenance="PREDICTION",
+            provenance="MODEL_PREDICTION",
         )
 
-    @app.get("/api/v1/jobs/{identifier}")
+    @app.get("/api/v1/jobs/{identifier}", response_model=JobEnvelope)
     def job(identifier: str) -> dict[str, Any]:
-        return envelope({"job": queue.public(queue.get(identifier))})
+        row = queue.get(identifier)
+        return envelope(
+            {
+                "job": queue.public(row),
+                "model_id": row["request"]["model_id"],
+                "run_id": row["pinned"]["model"].get("run_id"),
+            },
+            dataset_id=row["request"]["dataset_id"],
+            provenance="MODEL_PREDICTION",
+        )
 
-    @app.get("/api/v1/jobs/{identifier}/result")
+    @app.get("/api/v1/jobs/{identifier}/result", response_model=PredictionResult)
     def result(identifier: str) -> dict[str, Any]:
         return envelope(queue.result(identifier))
 
-    @app.post("/api/v1/jobs/{identifier}/cancel")
-    def cancel(identifier: str) -> dict[str, Any]:
-        return envelope({"job": queue.cancel(identifier)})
+    @app.get(
+        "/api/v1/jobs/{identifier}/frames/{lead}",
+        response_class=Response,
+        responses={
+            200: {"content": {"image/png": {"schema": {"type": "string", "format": "binary"}}}}
+        },
+    )
+    def prediction_image(
+        identifier: str,
+        lead: int = PathParam(ge=1, le=24),
+        layer: Literal["prediction", "target", "error"] = "prediction",
+    ) -> Response:
+        value = queue.result(identifier)
+        frame = next((row for row in value["frames"] if row["lead"] == lead), None)
+        if frame is None or frame["images"][layer] is None:
+            raise DataError(
+                "RESULT_IMAGE_UNAVAILABLE", "This lead has no requested image layer.", 404
+            )
+        path = queue.directory / "results" / identifier / f"lead-{lead}-{layer}.png"
+        try:
+            content = path.read_bytes()
+        except OSError as exc:
+            raise DataError(
+                "RESULT_IMAGE_UNAVAILABLE", "Result image file is unavailable."
+            ) from exc
+        digest = hashlib.sha256(content).hexdigest()
+        if digest != frame["images"][layer]["sha256"]:
+            raise DataError("RESULT_IMAGE_INVALID", "Result image checksum mismatch.")
+        return Response(
+            content,
+            media_type="image/png",
+            headers={
+                "ETag": '"' + digest + '"',
+                "Cache-Control": "private, max-age=31536000, immutable",
+                "X-Provenance": value["provenance"]
+                if layer == "prediction"
+                else "DERIVED_ANNOTATION"
+                if layer == "target"
+                else "PREDICTION_ERROR",
+                "X-Working-Grid": "64x64",
+                "X-Job-Id": identifier,
+            },
+        )
 
-    @app.get("/api/v1/experiments")
+    @app.post("/api/v1/jobs/{identifier}/cancel", response_model=JobEnvelope)
+    def cancel(identifier: str) -> dict[str, Any]:
+        queue.cancel(identifier)
+        return job(identifier)
+
+    @app.get("/api/v1/experiments", response_model=ExperimentListEnvelope)
     def experiments() -> dict[str, Any]:
         return envelope({"items": queue.list()})
+
+    @app.get("/api/v1/experiments/{identifier}", response_model=JobEnvelope)
+    def experiment(identifier: str) -> dict[str, Any]:
+        return job(identifier)
 
     @app.get("/api/v1/research")
     def research() -> dict[str, Any]:
@@ -259,11 +353,59 @@ def create_app(
                     "status": "available",
                     "reports": reports,
                     "input_sensitivity": value["input_sensitivity"],
+                    "configuration": value.get("configuration", {}),
+                    "runs": value.get("runs", []),
+                    "failure_cases": [
+                        {
+                            **failure,
+                            "png_url": "/api/v1/research/figures/"
+                            + Path(failure["public_png_relpath"]).name,
+                        }
+                        for failure in value.get("failure_cases", [])
+                    ],
                 }
             )
         except (OSError, ValueError, KeyError, TypeError) as exc:
             raise DataError(
                 "RESEARCH_UNAVAILABLE", "Frozen research report failed schema validation."
+            ) from exc
+
+    @app.get(
+        "/api/v1/research/figures/{name}",
+        response_class=Response,
+        responses={
+            200: {"content": {"image/png": {"schema": {"type": "string", "format": "binary"}}}}
+        },
+    )
+    def research_figure(name: str) -> Response:
+        if (
+            Path(name).name != name
+            or not name.startswith("forecast-test-")
+            or not name.endswith(".png")
+        ):
+            raise DataError("FIGURE_NOT_FOUND", "Research figure does not exist.", 404)
+        try:
+            report = json.loads(
+                (root / "docs/research/results/forecast-test-v1.json").read_text(encoding="utf-8")
+            )
+            expected = report["published_figures_sha256"].get(name)
+            if expected is None:
+                raise DataError("FIGURE_NOT_FOUND", "Research figure does not exist.", 404)
+            content = (root / "assets/figures" / name).read_bytes()
+            if hashlib.sha256(content).hexdigest() != expected:
+                raise ValueError("Figure checksum mismatch")
+            return Response(
+                content,
+                media_type="image/png",
+                headers={
+                    "ETag": '"' + expected + '"',
+                    "Cache-Control": "public, max-age=3600",
+                    "X-Provenance": "OBSERVED+DERIVED_ANNOTATION+PREDICTION",
+                },
+            )
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            raise DataError(
+                "FIGURE_UNAVAILABLE", "Verified research figure is unavailable."
             ) from exc
 
     dist = root / "frontend/dist"

@@ -37,6 +37,39 @@ interface ResearchReport {
 interface ResearchResponse {
   status: 'pending' | 'available';
   reports: ResearchReport[];
+  configuration?: Record<string, unknown>;
+  runs?: ResearchRun[];
+  failure_cases?: FailureCase[];
+}
+interface ResearchRun {
+  variant: string;
+  seed: number;
+  completed_steps: number;
+  best_step: number;
+  best_validation_loss: number | null;
+  elapsed_seconds: number | null;
+  parameter_count: number | null;
+  best_sha256: string | null;
+  cuda_peak_allocated_bytes: number | null;
+  cpu_peak_memory_bytes: number | null;
+  device: string;
+  precision: string;
+  git_sha: string | null;
+  config: Record<string, unknown>;
+  model_config: Record<string, unknown>;
+  versions: Record<string, unknown>;
+}
+interface FailureCase {
+  variant: string;
+  selection: string;
+  metrics: Partial<Record<MetricKey, number | boolean | null>> & {
+    sequence_id?: string;
+    source_target_index?: number;
+    lead?: number;
+    seed?: number | null;
+  };
+  png_url: string;
+  png_sha256: string;
 }
 const metricLabels: Record<MetricKey, string> = {
   iou: 'IoU · 派生区域',
@@ -171,6 +204,151 @@ export default function Research() {
                 </tbody>
               </table>
             </div>
+            <section className="research-run-section" aria-label="训练运行与预算">
+              <div className="section-topline">
+                <h2>运行配置与实际预算</h2>
+                <span className="mono muted">{research.data.runs?.length ?? 0} RUNS</span>
+              </div>
+              <p className="panel-note">
+                权重按最佳 validation loss
+                选择；下列耗时与内存是报告记录的实际消耗，未提供的值保持未知。
+              </p>
+              {research.data.configuration && (
+                <details className="research-config">
+                  <summary>冻结评估配置</summary>
+                  <Configuration values={research.data.configuration} />
+                </details>
+              )}
+              {research.data.runs?.length ? (
+                <>
+                  <div className="table-scroll research-results">
+                    <table>
+                      <caption>训练运行 · seed、验证选择与计算预算</caption>
+                      <thead>
+                        <tr>
+                          <th>Variant / seed</th>
+                          <th className="number">完成 / 最大步数</th>
+                          <th className="number">最佳 step</th>
+                          <th className="number">最佳 validation loss</th>
+                          <th className="number">耗时 / s</th>
+                          <th className="number">参数量</th>
+                          <th className="number">峰值 CUDA / MiB</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {research.data.runs.map((run) => (
+                          <tr key={`${run.variant}-${run.seed}`}>
+                            <td>
+                              {run.variant}
+                              <span className="run-seed mono">seed {run.seed}</span>
+                            </td>
+                            <td className="number mono">
+                              {run.completed_steps} / {displayValue(run.config.maximum_steps)}
+                            </td>
+                            <td className="number mono">{run.best_step}</td>
+                            <td className="number mono">{format(run.best_validation_loss)}</td>
+                            <td className="number mono">
+                              {run.elapsed_seconds == null
+                                ? '未提供'
+                                : run.elapsed_seconds.toFixed(3)}
+                            </td>
+                            <td className="number mono">{run.parameter_count ?? '未提供'}</td>
+                            <td className="number mono">
+                              {run.cuda_peak_allocated_bytes == null
+                                ? '未提供'
+                                : (run.cuda_peak_allocated_bytes / 1024 ** 2).toFixed(2)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="research-run-details">
+                    {research.data.runs.map((run) => (
+                      <details key={`${run.variant}-${run.seed}`}>
+                        <summary>
+                          {run.variant}{' '}
+                          <span className="mono">
+                            seed {run.seed} · {run.device} / {run.precision}
+                          </span>
+                        </summary>
+                        <dl className="run-identity">
+                          <div>
+                            <dt>最佳权重 SHA256</dt>
+                            <dd>{run.best_sha256 ?? '未提供'}</dd>
+                          </div>
+                          <div>
+                            <dt>Git SHA</dt>
+                            <dd>{run.git_sha ?? '未提供'}</dd>
+                          </div>
+                          <div>
+                            <dt>峰值 CPU 内存 / bytes</dt>
+                            <dd>{run.cpu_peak_memory_bytes ?? '未提供'}</dd>
+                          </div>
+                        </dl>
+                        <h3>训练配置</h3>
+                        <Configuration values={run.config} />
+                        <h3>模型配置</h3>
+                        <Configuration values={run.model_config} />
+                        <h3>运行环境</h3>
+                        <Configuration values={run.versions} />
+                      </details>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p className="research-pending">公开报告未提供训练运行明细。</p>
+              )}
+            </section>
+            <section className="research-failure-section" aria-label="真实失败案例">
+              <h2>失败案例，而非精选展示</h2>
+              <p className="panel-note">
+                每幅图来自公开报告的固定选择规则，展示 PREDICTION 与 DERIVED ANNOTATION
+                的差异。低分、空边界与失败形态均保留；图像不是新运行的实验。
+              </p>
+              {research.data.failure_cases?.length ? (
+                <div className="research-failures">
+                  {research.data.failure_cases.map((failure) => (
+                    <figure key={failure.variant} className="research-failure">
+                      <figcaption>
+                        <h3>{failure.variant}</h3>
+                        <p>{failure.selection}</p>
+                        <div className="failure-metadata mono">
+                          <span>
+                            {failure.metrics.sequence_id ?? '序列未知'} / F
+                            {failure.metrics.source_target_index ?? '—'} / Lead{' '}
+                            {failure.metrics.lead ?? '—'}
+                          </span>
+                          <span>seed {failure.metrics.seed ?? '不适用'}</span>
+                          <span>
+                            IoU {formatMetric(failure.metrics.iou)} / Dice{' '}
+                            {formatMetric(failure.metrics.dice)}
+                          </span>
+                        </div>
+                      </figcaption>
+                      <ResearchFigure url={failure.png_url} variant={failure.variant} />
+                      <details>
+                        <summary>图像校验与选中样本指标</summary>
+                        <dl>
+                          <div>
+                            <dt>PNG SHA256</dt>
+                            <dd>{failure.png_sha256}</dd>
+                          </div>
+                          {Object.entries(metricLabels).map(([key, label]) => (
+                            <div key={key}>
+                              <dt>{label}</dt>
+                              <dd>{formatMetric(failure.metrics[key as MetricKey])}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                      </details>
+                    </figure>
+                  ))}
+                </div>
+              ) : (
+                <p className="research-pending">公开报告未提供失败案例图。</p>
+              )}
+            </section>
             <section className="research-provenance">
               <h2>报告溯源</h2>
               {reports.map((report) => (
@@ -210,6 +388,67 @@ export default function Research() {
         )}
       </QueryState>
     </main>
+  );
+}
+
+function formatMetric(value: number | boolean | null | undefined) {
+  return typeof value === 'boolean' ? (value ? '是' : '否') : format(value);
+}
+
+function displayValue(value: unknown): string {
+  if (value == null) return '未提供';
+  if (Array.isArray(value)) return value.map(displayValue).join(', ');
+  return String(value);
+}
+
+function Configuration({ values }: { values: Record<string, unknown> }) {
+  return (
+    <dl className="research-configuration">
+      {Object.entries(values).map(([key, value]) => (
+        <div key={key}>
+          <dt>{key}</dt>
+          <dd>
+            {value !== null && typeof value === 'object' && !Array.isArray(value) ? (
+              <Configuration values={value as Record<string, unknown>} />
+            ) : (
+              displayValue(value)
+            )}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+function ResearchFigure({ url, variant }: { url: string; variant: string }) {
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  return failed ? (
+    <div className="failure-image-error" role="alert">
+      {variant} 失败案例图未能读取。
+      <button
+        onClick={() => {
+          setFailed(false);
+          setAttempt(attempt + 1);
+        }}
+      >
+        重试案例图
+      </button>
+    </div>
+  ) : (
+    <a
+      href={url}
+      target="_blank"
+      rel="noreferrer noopener"
+      aria-label={`打开 ${variant} 完整失败案例图`}
+    >
+      <img
+        src={attempt ? `${url}${url.includes('?') ? '&' : '?'}retry=${attempt}` : url}
+        alt={`${variant} 真实失败案例：预测与派生目标对比`}
+        loading="lazy"
+        onError={() => setFailed(true)}
+      />
+    </a>
   );
 }
 

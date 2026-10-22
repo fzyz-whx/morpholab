@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import importlib.metadata
 import importlib.util
 import json
+import platform
 import re
 from pathlib import Path
 from typing import Any, Literal
@@ -12,13 +14,31 @@ import contourpy
 import numpy as np
 from morpholab_ml.baselines.geometric import constant_normal_speed, persistence
 from morpholab_ml.evaluation.metrics import region_metrics
-from morpholab_ml.evaluation.runner import file_sha256, load_sequence, read_manifest, safe_path
+from morpholab_ml.evaluation.runner import (
+    file_sha256,
+    git_dirty,
+    git_sha,
+    load_sequence,
+    read_manifest,
+    safe_path,
+)
 from pydantic import BaseModel, ConfigDict, Field
 
 from backend.app.data import PRIMARY_DATASET, DataError
 
 VARIANTS = ("nca", "nca_regularized", "convgru", "nca_h1")
 BASELINES = {"persistence": persistence, "constant_normal_speed": constant_normal_speed}
+SOURCE_ROOT = Path(__file__).resolve().parents[2]
+IMPLEMENTATION_FILES = (
+    "backend/app/prediction.py",
+    "backend/app/worker.py",
+    "backend/app/assets.py",
+    "ml/morpholab_ml/models/forecast.py",
+    "ml/morpholab_ml/training/runner.py",
+    "ml/morpholab_ml/baselines/geometric.py",
+    "ml/morpholab_ml/evaluation/metrics.py",
+    "ml/morpholab_ml/data/preparation.py",
+)
 
 
 class PredictionRequest(BaseModel):
@@ -38,6 +58,29 @@ class PredictionService:
         self.artifacts = artifacts.resolve()
         self.manifest_path = self.artifacts / "processed/manifest.json"
         self.training = self.artifacts / "training/forecast-v1"
+        versions = {"python": platform.python_version()}
+        for package in ("numpy", "scipy", "pillow", "torch"):
+            try:
+                versions[package] = importlib.metadata.version(package)
+            except importlib.metadata.PackageNotFoundError:
+                versions[package] = None
+        self.implementation = {
+            "git_sha": git_sha(),
+            "git_dirty": git_dirty(),
+            "environment": versions,
+            "files_sha256": {
+                name: file_sha256(SOURCE_ROOT / name) for name in IMPLEMENTATION_FILES
+            },
+        }
+
+    def check_implementation(self) -> None:
+        if any(
+            file_sha256(SOURCE_ROOT / name) != digest
+            for name, digest in self.implementation["files_sha256"].items()
+        ):
+            raise DataError(
+                "SERVICE_RESTART_REQUIRED", "Implementation changed; restart the local service."
+            )
 
     def manifest(self) -> dict[str, Any]:
         try:
@@ -141,6 +184,7 @@ class PredictionService:
         return items
 
     def validate(self, request: PredictionRequest) -> dict[str, Any]:
+        self.check_implementation()
         manifest = self.manifest()
         record = next(
             (r for r in manifest["sequences"] if r["sequence_id"] == request.sequence_id), None
@@ -164,6 +208,7 @@ class PredictionService:
             "model": model,
             "manifest_sha256": file_sha256(self.manifest_path),
             "npz_sha256": record["output_file_sha256"],
+            "implementation": self.implementation,
         }
 
     def compute(
@@ -171,6 +216,14 @@ class PredictionService:
     ) -> dict[str, Any]:
         if cancelled():
             raise InterruptedError("Cancelled")
+        self.check_implementation()
+        if (
+            pinned.get("implementation", {}).get("files_sha256")
+            != self.implementation["files_sha256"]
+            or pinned.get("implementation", {}).get("environment")
+            != self.implementation["environment"]
+        ):
+            raise ValueError("Worker implementation differs from the submitted job")
         manifest = self.manifest()
         if file_sha256(self.manifest_path) != pinned["manifest_sha256"]:
             raise ValueError("Source manifest changed after submission")
@@ -225,6 +278,7 @@ class PredictionService:
             "request": request.model_dump(),
             "dataset_id": PRIMARY_DATASET,
             "model_id": request.model_id,
+            "run_id": model.get("run_id"),
             "grid": {
                 "width": 64,
                 "height": 64,
@@ -242,10 +296,11 @@ class PredictionService:
             },
             "model": model,
             "frames": frames,
-            "provenance": "MODEL_PREDICTION" if request.model_id in VARIANTS else "PREDICTION",
+            "provenance": "MODEL_PREDICTION",
             "target_provenance": "DERIVED_ANNOTATION",
             "device": "cpu",
             "precision": "fp32",
+            "implementation": self.implementation,
             "inference_environment": {
                 "deterministic": True,
                 "cpu_threads": 1,

@@ -1,5 +1,17 @@
 @import 'tailwindcss';
 
+.desktop-workbench-note {
+  display: none;
+}
+@media (max-width: 980px) {
+  .desktop-workbench-note {
+    display: block;
+    padding: 12px 20px;
+    color: #c0cdd0;
+    font-size: 13px;
+  }
+}
+
 .lead-curve {
   margin: 14px 0;
   font-size: 11px;
@@ -2018,5 +2030,199 @@ td:first-child {
   }
   .inspector > div:not([hidden]):last-child {
     display: block;
+  }
+}
+.previous-frame-toggle {
+  margin-top: 16px;
+  width: 100%;
+  font-size: 12px;
+  padding: 8px;
+}
+.previous-frame-toggle[aria-pressed='true'] {
+  color: var(--accent);
+  border-color: #3c554c;
+}
+.previous-frame-reference {
+  margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.previous-frame-reference figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.previous-frame-reference img {
+  width: 100%;
+  max-width: 160px;
+  aspect-ratio: 1;
+  object-fit: contain;
+  image-rendering: pixelated;
+  display: block;
+}
+.previous-frame-reference [role='alert'] {
+  font-size: 12px;
+  color: var(--warning);
+}
+.prediction-error-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+.overlay-asset-error {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #121a1ff2;
+  color: var(--warning);
+  padding: 10px;
+  font-size: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.overlay-asset-error button {
+  padding: 5px 8px;
+  font-size: 12px;
+}
+.research-run-section,
+.research-failure-section {
+  margin-top: 48px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+.research-run-section .section-topline {
+  align-items: center;
+}
+.research-run-section > .panel-note,
+.research-failure-section > .panel-note {
+  margin: 14px 0 20px;
+  max-width: 960px;
+}
+.research-config,
+.research-run-details details {
+  border-top: 1px solid var(--border);
+  padding: 16px 0;
+}
+.research-config summary,
+.research-run-details summary,
+.research-failure summary {
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--accent);
+}
+.run-seed {
+  display: block;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.research-run-details {
+  margin-top: 20px;
+}
+.research-run-details summary .mono {
+  color: var(--muted);
+  margin-left: 16px;
+}
+.research-run-details h3 {
+  margin: 20px 0 10px;
+  font-size: 14px;
+}
+.research-configuration,
+.run-identity {
+  font-size: 12px;
+  margin: 16px 0;
+}
+.research-configuration > div,
+.run-identity > div {
+  display: grid;
+  grid-template-columns: minmax(130px, 220px) minmax(0, 1fr);
+  gap: 20px;
+  padding: 8px 0;
+}
+.research-configuration dd,
+.run-identity dd {
+  font-family: Consolas, monospace;
+  overflow-wrap: anywhere;
+}
+.research-configuration .research-configuration {
+  margin: 0;
+}
+.research-configuration .research-configuration > div:first-child {
+  padding-top: 0;
+}
+.research-failures {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+.research-failure {
+  margin: 0;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+  min-width: 0;
+}
+.research-failure figcaption {
+  margin-bottom: 16px;
+}
+.research-failure h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+.research-failure figcaption p {
+  font-size: 12px;
+  color: var(--muted);
+}
+.failure-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  font-size: 12px;
+  margin-top: 12px;
+}
+.research-failure > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+}
+.research-failure details {
+  margin-top: 14px;
+}
+.research-failure dl {
+  font-size: 12px;
+  margin-top: 14px;
+}
+.research-failure dl > div {
+  display: grid;
+  grid-template-columns: minmax(150px, 220px) minmax(0, 1fr);
+  gap: 20px;
+  padding: 7px 0;
+}
+.research-failure dd {
+  font-family: Consolas, monospace;
+  overflow-wrap: anywhere;
+}
+.failure-image-error {
+  padding: 32px;
+  color: var(--warning);
+  font-size: 12px;
+  border: 1px solid var(--border);
+}
+.failure-image-error button {
+  margin-left: 16px;
+}
+@media (max-width: 680px) {
+  .research-configuration > div,
+  .run-identity > div,
+  .research-failure dl > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
   }
 }

@@ -14,7 +14,9 @@ uv run --locked ruff check .
 uv run --locked ruff format --check .
 uv run --locked mypy
 uv run --locked python scripts/check_docs.py
+uv run --locked python scripts/export_openapi.py --check
 pnpm --dir frontend install --frozen-lockfile
+pnpm --dir frontend api:check
 pnpm --dir frontend lint
 pnpm --dir frontend format:check
 pnpm --dir frontend typecheck
@@ -25,6 +27,23 @@ pnpm --dir frontend test:e2e
 
 Linux浏览器fixture先安装Playwright Chromium。真实E2E需实际数据、预处理、权重与worker，不能用fixture结果代替。
 提交说明应列出实际命令、通过/失败/跳过和未验证项；不要只写“测试通过”。
+
+## API契约变更
+
+数据与预测主链使用Pydantic `response_model`；后端模型是请求/响应契约的依据。修改契约后，先导出真实应用的 [OpenAPI快照](docs/architecture/openapi.json)，再生成前端类型：
+
+```sh
+uv run --locked python scripts/export_openapi.py
+pnpm --dir frontend api:generate
+uv run --locked python scripts/export_openapi.py --check
+pnpm --dir frontend api:check
+```
+
+[前端生成脚本](frontend/scripts/api-types.mjs)使用openapi-typescript 7.13与TypeScript 5.9.3生成 [api.d.ts](frontend/src/generated/api.d.ts)，不要手改生成产物。Python CI拒绝与实际应用不符的OpenAPI快照，前端CI拒绝与快照不符的类型。相关模型、快照与生成类型应在同一工作单元内审查；不要用手写宽泛类型绕过响应约束。
+
+预测结果JSON只传轮廓、面积、指标和图像URL/SHA256，不再嵌入 `region`/`target_region` 像素数组；图像资产与Research公开图必须遵守hash与白名单校验。所有预测JSON，包括经典基线，统一标记 `MODEL_PREDICTION`；派生目标为 `DERIVED_ANNOTATION`，UI图例为 `PREDICTION`。详见[API契约](docs/architecture/api.md)与[作业恢复边界](docs/architecture/prediction-jobs.md)。
+
+新作业记录Git/dirty、实现源码hash及环境，API与worker核对执行身份；旧历史的可选 `implementation:null` 保持未知。修改实现文件后重启API和worker再验收。心跳失效、进程自动重启与作业恢复是不同证据：恢复验证应记录实际job状态和图像资产，不能只检查HTTP200或监督进程已启动。服务维护不得改写正式ML结果。
 
 ## 研究变更
 

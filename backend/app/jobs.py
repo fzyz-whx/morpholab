@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 import uuid
 from datetime import UTC, datetime
 from pathlib import Path
@@ -22,6 +23,7 @@ from sqlalchemy import (
     update,
 )
 
+from backend.app.assets import image_assets
 from backend.app.data import DataError
 
 
@@ -31,9 +33,23 @@ def now() -> str:
 
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name(path.name + ".tmp")
-    temporary.write_text(json.dumps(value, allow_nan=False), encoding="utf-8")
-    os.replace(temporary, path)
+    temporary = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
+    try:
+        temporary.write_text(json.dumps(value, allow_nan=False), encoding="utf-8")
+        for attempt in range(6):
+            try:
+                os.replace(temporary, path)
+                break
+            except PermissionError:
+                # Windows readers can briefly deny FILE_SHARE_DELETE to the target.
+                if attempt == 5:
+                    raise
+                time.sleep(0.01 * (attempt + 1))
+    finally:
+        try:
+            temporary.unlink(missing_ok=True)
+        except OSError:
+            pass  # A disposable cache temp must not mask the original write exception.
 
 
 def worker_ready(directory: Path) -> bool:
@@ -173,7 +189,7 @@ class JobQueue:
                 return None
         return self.get(identifier)
 
-    def finish(self, identifier: str, status: str, error: dict[str, str] | None = None) -> None:
+    def finish(self, identifier: str, status: str, error: dict[str, Any] | None = None) -> None:
         if status not in {"succeeded", "failed", "cancelled"}:
             raise ValueError("Invalid terminal job status")
         with self.engine.begin() as connection:
@@ -196,7 +212,8 @@ class JobQueue:
         if row["status"] != "succeeded":
             raise DataError("RESULT_NOT_READY", "Job has no successful result.", 409)
         try:
-            return json.loads(self.result_path(identifier).read_text(encoding="utf-8"))
+            result = json.loads(self.result_path(identifier).read_text(encoding="utf-8"))
+            return image_assets(result, self.directory / "results", identifier)
         except (OSError, ValueError) as exc:
             raise DataError("RESULT_UNAVAILABLE", "Saved job result is unavailable.") from exc
 
