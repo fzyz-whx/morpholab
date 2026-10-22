@@ -11,7 +11,7 @@
 | ScientificCanvas | 真实PNG、默认按容器宽高完整适配，缩放滑条可手动放大、滚动与“适合画布”复位 | ResizeObserver跟随布局、保持源比例、loading/error、可聚焦键盘区域、img替代文字、源尺寸标识 |
 | Timeline | 单帧步进、首尾、播放/暂停、range选择 | frame零基编号，边界禁用，方向键、Home、End，QC标记 |
 | FrameInspector | 当前帧QC、触边、项目划分及官方划分 | 文字与颜色共同标识；失败帧仍可访问 |
-| ModelState | 未训练/未评估说明 | 无预测执行假按钮，说明下一阶段闸门 |
+| ModelState | 真实registry可用性 | 区分已训练、权重可用与运行时可用；预测按钮连接真实作业 |
 | ProtocolPage | Research与Methods说明 | 原始/派生标签边界、split局限、原文来源链接 |
 
 M1不含训练控制、指标曲线、模型比较或虚拟干预。实现后的单元/组件测试覆盖请求失败与恢复、筛选/空状态、时间轴边界、图层及播放行为；真实浏览器/E2E由主代理另验收。

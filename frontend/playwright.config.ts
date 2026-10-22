@@ -3,6 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './e2e',
   timeout: 30_000,
+  globalTimeout: 120_000,
   expect: { timeout: 12_000 },
   fullyParallel: false,
   workers: 1,
@@ -12,6 +13,7 @@ export default defineConfig({
     baseURL: process.env.MORPHOLAB_E2E_URL ?? 'http://127.0.0.1:5173',
     viewport: { width: 1440, height: 900 },
     channel: process.env.CI || process.platform !== 'win32' ? undefined : 'msedge',
+    launchOptions: { args: ['--disable-gpu'] },
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },

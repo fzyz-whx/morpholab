@@ -25,4 +25,4 @@
 
 每个新目录保存run.json、逐lead CSV/JSON、逐序列与总汇总、最差案例JSON/PNG。元信息记录Git SHA、全工作树dirty状态、关键实现文件SHA256、源manifest SHA256、配置、依赖、实际时间和来源。图像明确区分历史/未来派生标签与预测。
 
-源码提交前的validation执行只算dirty pilot，不补造当时缺失的来源hash。提交、push并核对后，从干净工作树重跑才形成可引用的正式validation记录。当前不通过调整恒速参数追逐pilot成绩，也未评估正式test。
+源码提交前的validation执行只算dirty pilot，不补造当时缺失的来源hash。提交、push并核对后，从干净工作树重跑才形成可引用的正式validation记录。当前不通过调整恒速参数追逐pilot成绩，此处保留validation阶段记录；随后已按冻结协议评价正式test，见[结果](../research/results.md)。

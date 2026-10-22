@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="520" viewBox="0 0 1240 520" role="img" aria-labelledby="title desc">
+  <title id="title">MorphoLab: traceable data, local forecasting and held-out evaluation</title>
+  <desc id="desc">Actual implemented architecture. Historical annotation-derived signed distance fields condition an independently implemented NCA. Models never receive future targets during rollout.</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#8ec5b5"/></marker></defs>
+  <rect width="1240" height="520" rx="16" fill="#0c1419"/>
+  <g font-family="Segoe UI, sans-serif" fill="#e1e8e9">
+    <text x="36" y="43" font-size="23">MorphoLab / from source contour to a falsifiable forecast</text>
+    <text x="36" y="69" fill="#98abb0" font-size="13">Implemented pipeline · Drosophila embryonic in vivo laser wounds · not future microscopy texture generation</text>
+    <g fill="#14232a" stroke="#35505a">
+      <rect x="36" y="100" width="165" height="100" rx="8"/><rect x="235" y="100" width="165" height="100" rx="8"/>
+      <rect x="434" y="100" width="165" height="100" rx="8"/><rect x="633" y="100" width="165" height="100" rx="8"/>
+      <rect x="832" y="100" width="165" height="100" rx="8"/><rect x="1031" y="100" width="173" height="100" rx="8"/>
+    </g>
+    <g font-size="15">
+      <text x="50" y="128">Source + checksum</text><text x="249" y="128">Strict contour QC</text><text x="448" y="128">Frozen group split</text>
+      <text x="647" y="128">Historical shape</text><text x="846" y="128">Matched comparisons</text><text x="1045" y="128">Held-out evaluation</text>
+    </g>
+    <g font-size="12" fill="#a8babd">
+      <text x="50" y="154">62 source sequences</text><text x="50" y="177">7,229 frames / CC BY 4.0</text>
+      <text x="249" y="154">Fill closed contour → SDF</text><text x="249" y="177">7,183 valid at 64 × 64</text>
+      <text x="448" y="154">45 train / 12 val / 5 test</text><text x="448" y="177">Independent protocol</text>
+      <text x="647" y="154">L4 for training / H12 loss</text><text x="647" y="177">No future teacher forcing</text>
+      <text x="846" y="154">Classical / NCA / ConvGRU</text><text x="846" y="177">Neural: 3 × 600 steps</text>
+      <text x="1045" y="154">IoU / area / boundary</text><text x="1045" y="177">Per-sequence means + SD</text>
+    </g>
+    <g stroke="#8ec5b5" stroke-width="1.5" marker-end="url(#arrow)"><path d="M203 150H229"/><path d="M402 150H428"/><path d="M601 150H627"/><path d="M800 150H826"/><path d="M999 150H1025"/></g>
+    <text x="36" y="248" font-size="18">Inside the local NCA</text><text x="36" y="271" fill="#98abb0" font-size="13">14,622 parameters · shared spatial rule · computational grid states are not biological cells</text>
+    <g fill="#14232a" stroke="#35505a"><rect x="36" y="298" width="210" height="108" rx="8"/><rect x="284" y="298" width="210" height="108" rx="8"/><rect x="532" y="298" width="210" height="108" rx="8"/><rect x="780" y="298" width="210" height="108" rx="8"/><rect x="1028" y="298" width="176" height="108" rx="8"/></g>
+    <g font-size="15"><text x="50" y="326">Historical conditions</text><text x="298" y="326">Initial state S₀</text><text x="546" y="326">Fixed local perception</text><text x="794" y="326">Shared learned update</text><text x="1042" y="326">Read channel 0</text></g>
+    <g font-size="12" fill="#a8babd">
+      <text x="50" y="353">Last SDF + per-pixel slope</text><text x="50" y="377">Conditions reused each step</text>
+      <text x="298" y="353">2 conditions + 14 encoded</text><text x="298" y="377">16 channels, bounded ±4</text>
+      <text x="546" y="353">Identity / Sobel x,y / Laplace</text><text x="546" y="377">3 × 3 replicate boundary</text>
+      <text x="794" y="353">1 × 1 MLP + conditions</text><text x="794" y="377">S ← clip(S + 0.1 ΔS, ±4)</text>
+      <text x="1042" y="353">Clip SDF to ±1</text><text x="1042" y="377">Region: SDF &gt; 0</text>
+    </g>
+    <g stroke="#8ec5b5" fill="none" stroke-width="1.5" marker-end="url(#arrow)"><path d="M248 350H278"/><path d="M496 350H526"/><path d="M744 350H774"/><path d="M992 350H1022"/><path d="M884 410V439H391V410"/></g>
+    <text x="515" y="458" fill="#8ec5b5" font-size="13">Autonomous recurrent rollout / lead 1 … 24</text>
+    <text x="36" y="494" fill="#98abb0" font-size="12">Original method diagram. Numerical results and failure cases are reported separately; no superiority or biological mechanism is implied by this schematic.</text>
+  </g>
+</svg>

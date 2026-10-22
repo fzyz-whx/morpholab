@@ -1,168 +1,143 @@
 # MorphoLab · 形态实验室
 
-研究真实显微时序中的创面闭合，比较局部神经更新规则与经典动力学、时序网络的预测行为。
+[English](README.en.md) · [研究结果](docs/research/results.md) · [模型卡](docs/research/model-card.md) · [复现协议](docs/research/experiment-protocol.md)
 
-**Research prototype · 开发中。** 已完整校验并解析62条、7,229帧真实创面时序，并可在Web工作台浏览原图、原始薄轮廓和逐帧QC。官方划分映射仍未知，项目采用独立协议。经典基线已完成validation评价；4种神经配置各3个seed已完成真实训练，正式test评价进行中。
+研究真实显微时序中的创面闭合：给定历史轮廓，局部神经更新规则能否预测后续形态？
 
-![MorphoLab真实序列工作台](assets/screenshots/studio-real-sequence.png)
+MorphoLab 是一个可在本机运行的科研工作台，也是一组可复算的对照实验。它连接真实数据审计、严格的派生标签管线、经典基线、自主实现的 NCA 与 ConvGRU，以及带来源和失败记录的预测作业。当前版本为 **0.1.0 研究原型**，发布验收进行中。
 
-WH01第0帧，1440×900实际浏览器。灰度为真实观测，浅色线为发布者原始薄轮廓；当前没有预测图层。影像来自[Backova等，Zenodo 7660424](https://doi.org/10.5281/zenodo.7660424)，CC BY 4.0；显示进行了对比度映射、放大和轮廓叠加。
+![真实NCA预测工作台](assets/screenshots/studio-prediction-v1.png)
 
-## 研究问题
+实际 Edge、1440×900，WH01 历史 F0–3 → 预测 F4–27。灰度始终是 **OBSERVED** 原帧；浅色线是发布者 **ANNOTATION**，琥珀虚线是 **PREDICTION**。未来显微纹理没有由网络生成。影像来自 Backová 等（2023），[Zenodo 7660424](https://doi.org/10.5281/zenodo.7660424)，CC BY 4.0；修改包括对比度映射、放大、派生目标及预测叠加。[完整署名](datasets/ATTRIBUTION.md)。
 
-给定创面闭合过程的前几个观测时间点，具有共享局部更新规则的神经细胞自动机（Neural Cellular Automata, NCA）能否预测后续形态，并在长期滚动预测中保持稳定？我们将通过固定实验级划分、朴素基线和失败案例评价它，而不预设 NCA 一定更好。
+## 研究了什么
 
-优先审计的数据是 **果蝇胚胎 in vivo 激光创面闭合**，不是体外细胞划痕，也不是临床皮肤伤口。NCA 的网格单元是计算状态，不等同于真实细胞。后期可能加入的干预仅为模型内虚拟实验，不支持现实生物因果或治疗结论。
+主域为 **果蝇胚胎 in vivo 激光创面闭合**，不是体外划痕或临床伤口。NCA 的网格单元是计算状态，不等同于真实细胞。输入是历史注释派生的形态，当前软件不自动分割原始显微图，也不支持治疗或生物干预因果结论。
 
-## 开发状态
+我们比较 Persistence、恒法向速度、小型 ConvGRU、基础 NCA、更新幅度正则 NCA，以及单步监督消融。真实训练前冻结数据、模型和预算；test 不用于选权重、超参数或展示 seed。已有工作已经研究过本数据的视频预测和 NCA 伤口建模，本项目不把概念组合当作新颖性。
 
-| 阶段 | 当前状态 | 可检查的交付 |
-|---|---|---|
-| M-1 仓库启动 | 已完成 | 公开仓库、工作协议、Windows / Ubuntu CI 通过 |
-| M0 数据与相关工作审计 | 已通过，限制保留 | 全量解析、来源清单、本地QA、派生目标与独立协议ADR |
-| M1 设计系统与真实数据浏览 | 已通过 | 真实浏览、图层/时间轴/QC、双桌面截图、真实E2E及远端CI |
-| M2 经典基线 | 已通过 | 完整可复现管线、正式validation评价、逐序列指标与负结果 |
-| M3 神经模型 | 真实训练完成 | NCA/ConvGRU及两项消融，12个run各600步；检查点、预算与hash留存 |
-| M4 正式神经实验 | 评价进行中 | 代码先提交再评分；尚无已审查test结论 |
-| M5–M7 软件闭环与发布 | 进行中 | 数据浏览可用；预测作业闭环与发布尚未验收 |
+![自主实现的模型与数据架构](assets/diagrams/forecast-architecture.svg)
 
-当前可以浏览数据，没有可演示的模型预测。科研结果图将在真实实验落地后加入。
+原创方法图，对应实际源码：固定局部感知、16 通道状态和共享更新网络；比较模型使用相同历史摘要。方法定义见[模型架构](docs/architecture/forecast-models.md)，预注册决策见 [ADR-0002](docs/project/decisions/ADR-0002-local-models-and-training-budget.md) 与 [ADR-0003](docs/project/decisions/ADR-0003-matched-window-horizon-ablation.md)。
 
-## 当前可以做什么
+## 得到了什么结果
 
-- **核查来源与完整性**：下载原始压缩包、核对发布MD5与本地SHA256、审计全部帧与标注，保留数量差异和未知项。
-- **浏览真实实验**：检索62条序列、按本项目划分筛选；原图、原注释和叠加分别可查看。
-- **逐帧检查质量**：键盘、播放、时间轴与缩放均连接实际PNG；失败帧仍保留可见，来源和QC范围同步显示。
-- **复现预处理**：保留全部时间点，严格QC后生成明确标记的派生区域/距离场、固定划分与hash清单。
+![真实保留测试集结果](assets/figures/forecast-test-curves-v1.png)
 
-![真实数据档案](assets/screenshots/archive-v1.png)
+本项目独立协议的 **5 条源序列代理、25 个共同窗口**，L4、未来 lead 1–24。先窗口→序列均值，再序列等权→每 seed 均值，最后对 seed17/29/43 求均值与样本标准差。阴影是训练 seed 的 SD，**不是生物学置信区间**；确定性方法没有 seed SD。目标是原始薄轮廓经严格 QC 派生的区域，不是原始人工填充 mask。
 
-实际数据档案；计数来自已审计文件，官方划分未知保持可见。两种桌面尺寸及操作记录见[设计审查](docs/design/reviews/2026-10-21-m1.md)。
+| 方法 | H24 IoU ↑ | H24 平均边界距离 ↓（64-grid px） |
+|---|---:|---:|
+| Persistence | 0.3368 | 3.624 |
+| 恒法向速度 | 0.2691 | 31.782 |
+| ConvGRU | 0.4128 ± 0.0446 | 6.242 |
+| NCA | 0.4596 ± 0.0269 | 4.152 |
+| 正则 NCA | 0.4612 ± 0.0255 | 4.153 |
+| H1 监督 NCA | 0.3376 ± 0.0264 | 3.106 |
 
-## 方法与证据边界
+NCA 的远期 IoU 较高，但边界距离仍差于 Persistence，H12 IoU 也低于 ConvGRU。正则版收益很小；单步监督表现较差，但其实际算力少于多步训练，不能视为严格等算力因果证明。NCA 还会在创面未完全闭合时预测空区域。我们保留这些反例，没有在看 test 后调参追分。
 
-计划比较 Persistence、经典边界动力学、小型 ConvGRU/ConvLSTM、基础 NCA，以及有明确假设的最小改进。监督目标和指标必须由数据标签的实际语义决定：骨架线不能直接当作区域真值计算 IoU。
+[完整多指标、每序列结果、输入长度敏感性、全部失败案例与哈希](docs/research/forecast-results-v1.md) · [局限](docs/research/limitations.md)。不声称统计显著、跨域泛化、临床性能或超过原视频预测论文。
 
-当前任务明确为**历史轮廓条件下的形态预测**，原始显微图像用于浏览与对齐；不是由灰度图自动分割或生成未来显微纹理。[ADR-0001](docs/project/decisions/ADR-0001-observed-domain-target-and-split.md)规定闭轮廓派生区域、严格QC及45/12/5的独立协议，未声称恢复作者44/12/5。
+## 工作台可以做什么
 
-创面视频预测与 NCA 外部信号响应均已有研究；本项目不将这些概念组合称为创新。相关工作、资源预算和对照协议将先于正式训练明确。
+- 浏览 62 条真实序列：来源、许可、本项目分组、原图、原始薄轮廓、QC、逐帧播放与缩放。
+- 提交 L2/4/8、H1–24 形态预测：固定来源身份后入 SQLite 队列，由独立 CPU worker 加载受控权重执行。
+- 查看预测虚线、FP/FN 误差层、当前 lead 指标、面积/边界曲线和数据/权重 hash；刷新后从持久历史恢复。
+- 读取真实冻结研究报告；缺数据、权重、运行时或 worker 时显示实际状态，不补造结果。
 
-```mermaid
-flowchart LR
-  A[公开数据与授权] --> B[下载审计与来源清单]
-  B --> C[预处理与实验级划分]
-  C --> D[基线与 NCA 对照]
-  D --> E[误差分析与可追溯产物]
-  E --> F[Web 科研工作台]
-```
+![工作台中的实际研究报告](assets/screenshots/research-real-v1.png)
 
-上图表示研究流程，下载审计、预处理、基线、神经训练与真实数据浏览已实现；预测作业接入尚在进行。
+本机实际页面，数值由公开 JSON 提供。桌面适配及真实浏览器检查见 [M1](docs/design/reviews/2026-10-21-m1.md) 与 [M5](docs/design/reviews/2026-10-22-m5.md) 审查。
 
-## 从这里开始
+## 本机运行
 
-- [项目愿景](docs/project/vision.md)：用户、科学问题与不做的范围。
-- [开发路线图](docs/project/roadmap.md)：阶段依赖与验收闸门。
-- [数据审计](docs/research/data-audit.md)：网页描述、实际文件与尚未解决问题。
-- [相邻工作](docs/research/related-work.md)与[候选假设](docs/research/hypotheses.md)：已有成果、重复风险及可证伪问题。
-- [数据契约](docs/architecture/data-contract.md)：来源、连续性、分组、编码文件 hash 与路径边界。
-- [可复现管线](docs/architecture/data-pipeline.md)：不压缩时间的QC、派生区域/距离场与冻结清单。
-- [总任务书 v0.2](docs/project/master-plan-v0.2.md)：完整研发契约。
-- [质量规范](docs/development/quality.md)与 [Git 工作协议](docs/development/git-workflow.md)。
-
-本机已核对 Python 3.12.10、Node 24.18.0、uv 0.11.3、pnpm 11.22.0。以下 CPU 命令已执行；当前无需安装 PyTorch 或使用商业模型 API：
+需要 Python 3.12、uv、Node 24、pnpm 11。依赖锁定于 `uv.lock` 与 `frontend/pnpm-lock.yaml`；无需商业模型 API 或密钥。CPU 可以完成浏览和预测。
 
 ```sh
-uv sync --locked --python 3.12
-uv run --locked python scripts/check_docs.py
-uv run --locked pytest -q tests/test_check_docs.py tests/test_verify_remote.py
-uv run --locked mypy
-```
-
-下载真实数据（约 199 MB，需要网络；后续自动验证缓存）：
-
-```sh
-uv run --locked python scripts/download_data.py
-uv run --locked python scripts/audit_data.py
-uv run --locked python scripts/prepare_data.py
-uv run --locked pytest -q tests/test_download_data.py
-```
-
-压缩包有62对TIFF，与发布页61条描述不同。审计生成逐帧清单、两条各六帧样本与本地叠加QA；预处理保留所有时间点，其中7,183帧通过64网格QC，46帧标为无效。原图不进入Git，官方划分未知，训练使用明确独立的本项目协议。
-
-启动仅本机监听的只读数据API：
-
-```sh
-uv run --locked python scripts/serve.py
-```
-
-服务位于 `http://127.0.0.1:8765`，[接口说明](docs/architecture/api.md)包括数据来源、序列、逐帧PNG和结构化错误。当前不提供训练或预测作业。健康状态会区分服务启动与真实数据可用；缺下载/审计时给出恢复命令。
-
-另开终端启动工作台（Windows/PowerShell与Linux使用相同命令）：
-
-```sh
+git clone https://github.com/fzyz-whx/morpholab.git
+cd morpholab
+uv sync --locked --python 3.12 --extra cpu
 pnpm --dir frontend install --frozen-lockfile
-pnpm --dir frontend dev
+pnpm --dir frontend build
 ```
 
-打开 `http://127.0.0.1:5173`。图像显示经过转换，原始uint16数据保持本地。无需GPU即可完成上述流程。
-
-前端检查：
+取得数据并生成中间表示（原压缩包约 199 MB，之后校验复用本地缓存）：
 
 ```sh
+uv run --locked --extra cpu python scripts/download_data.py
+uv run --locked --extra cpu python scripts/audit_data.py
+uv run --locked --extra cpu python scripts/prepare_data.py
+```
+
+取得发布权重或自行训练，然后启动：
+
+```sh
+uv run --locked --extra cpu python scripts/download_models.py
+uv run --locked --extra cpu python scripts/serve.py
+```
+
+打开 `http://127.0.0.1:8765`。一次启动提供生产前端、API 与独立 worker；默认仅本机监听。源数据不写回，任务状态存入忽略目录 `artifacts/app`。OpenAPI 位于 `/docs`。下载器只接受固定发布包，核验压缩包及全部文件 SHA256，不覆盖不同的已有训练目录。发布包包含 12 个 best checkpoint 及可分享数值元信息，约 2.7 MB，不包含原始影像。
+
+若只浏览数据或运行经典基线，可不安装 Torch、也不下载模型；使用 `uv sync --locked` 与同样的脚本。神经模型会明确不可用。已有经核验的外部缓存可通过 `MORPHOLAB_ARTIFACTS_ROOT` 指定；详见 [FAQ](docs/FAQ.md)。开发界面可另开 `pnpm --dir frontend dev`，端口 5173，代理到 8765。
+
+## 复算研究
+
+```sh
+uv sync --locked --extra cpu --extra reports
+# 新目录：4 配置 × 3 seeds，每次 600 步；拒绝覆盖，失败即停
+uv run --locked --extra cpu python scripts/train_matrix.py --device cpu --output artifacts/training/forecast-v1
+# 有发布权重时可跳过训练，直接评价；不读取其他 split 数组
+uv run --locked --extra cpu python scripts/evaluate_models.py --split test --device cpu --output artifacts/experiments/forecast-reproduction
+uv run --locked --extra cpu --extra reports python scripts/report_forecasts.py --evaluation artifacts/experiments/forecast-reproduction
+```
+
+训练与评价要求干净源码、完整 Git 历史、完整数据。若已安装发布权重，重新训练时选择另一新输出目录，并在评价时用 `--matrix-root` 指定它。默认评价 split 是 validation；正式 test 需要显式 `--split test`。`scripts/evaluate.py`可独立复现两个经典基线。
+
+兼容 NVIDIA 环境可把 `cpu` extra 与训练/评价 device 换为 `cuda`；两种 extra 互斥。正式 12 次训练使用 RTX 5060 Laptop、IEEE fp32，实际运行时间合计 676.422 秒；CPU 支持路径与实测证据见[验收记录](docs/development/acceptance.md)。不承诺其他机器运行时间或跨硬件逐位相同。
+
+## 数据与证据边界
+
+Zenodo API 标注 CC BY 4.0；实际下载 198,715,081 字节，MD5 与发布记录一致。压缩包有 62 对 TIFF，与网页 61 条的描述不同。7,229 帧全部保留原始时间索引，64 网格严格 QC 后 7,183 帧有效，46 帧无效；不补线、不压缩时间。
+
+官方划分映射未取得，本项目采用明确独立的 **45 train / 12 validation / 5 test** 协议。源序列只是独立实验的代理，同动物/批次关系未知。逐帧物理时间与标尺为 null，指标以工作网格 pixel / pixel² 报告。[审计](docs/research/data-audit.md)与[数据管线](docs/architecture/data-pipeline.md)记录所有限制。
+
+GigaDB 100118 是不同域的体外划痕次级来源，未混入本域分数；BBBC019 是静态图像，未拼造视频。公开可见不自动授予再分发权；大型源影像不进入 Git，截图遵循数据署名许可。
+
+## 工程与开发状态
+
+计算核心与 HTTP / 数据库分离。FastAPI + SQLAlchemy / SQLite 持久作业、独立 worker、受控权重安全加载；React / TypeScript / Vite 科学画布。源码、数据清单、seed、模型、预算与失败案例均可追溯。工程结构见[后端架构](docs/architecture/prediction-jobs.md)。
+
+| 阶段 | 状态 |
+|---|---|
+| M-1 / M0 | 公开仓库、数据与相关工作审计已通过 |
+| M1 / M2 | 真实数据浏览、统一管线与经典基线已通过 |
+| M3 / M4 | 12 次真实训练、冻结 test 对照与两项消融已完成 |
+| M5 | 持久预测 API、真实工作台与完整浏览器链已通过 |
+| M6 | 按 [ADR-0004](docs/project/decisions/ADR-0004-defer-control-and-bound-reliability.md) 降级为预测敏感性分析，不提供未验证虚拟控制 |
+| M7 | 新克隆、发布与文档验收进行中 |
+
+常用质量检查：
+
+```sh
+uv run --locked --extra cpu --extra reports pytest -q
+uv run --locked ruff check .
+uv run --locked ruff format --check .
+uv run --locked mypy
+uv run --locked python scripts/check_docs.py
 pnpm --dir frontend lint
 pnpm --dir frontend typecheck
 pnpm --dir frontend test
 pnpm --dir frontend build
 pnpm --dir frontend test:e2e
-pnpm --dir frontend test:e2e:real
 ```
 
-`test:e2e`使用标明为synthetic的HTTP fixture；`test:e2e:real`实际要求上述数据和API已就绪，不以mock代替。Windows默认使用本机Edge，Linux/CI先运行 `pnpm --dir frontend exec playwright install chromium` 安装测试浏览器。
+`test:e2e`使用明确标注 synthetic 的 HTTP fixture，不能证明真实数据/模型链。真实验收需准备好数据、权重和服务，再运行 `pnpm --dir frontend test:e2e:real`。Windows 使用本机 Edge，Linux/CI 先安装 Playwright Chromium。`MORPHOLAB_E2E_URL=http://127.0.0.1:8765`可指定生产服务器并避免启动 Vite。[贡献规范](CONTRIBUTING.md) · [安全边界](SECURITY.md) · [开发记录](docs/development/progress.md) · [现场讲解路线](docs/demo.md)。
 
-经典基线与几何指标的CPU命令：
+## 来源与引用
 
-```sh
-uv run --locked python scripts/evaluate.py
-```
+- Backová 等，2023：[数据 DOI](https://doi.org/10.5281/zenodo.7660424)；[ISBI 视频预测工作](https://cvpd.github.io/publication/backova-2023-modeling/)。
+- [Growing Neural Cellular Automata](https://distill.pub/2020/growing-ca/)，2020；[Neural Cellular Automata Can Respond to Signals](https://arxiv.org/abs/2305.12971)，2023。
+- [GigaDB 100118](https://doi.org/10.5524/100118)、[BBBC019](https://bbbc.broadinstitute.org/BBBC019)：次级来源与静态图像边界见审计。
 
-默认只评估validation，保存逐窗口/lead分数、逐序列等权汇总、Git/数据hash和失败图到本地新目录。[方法定义](docs/architecture/baseline-evaluation.md)解释指标、空边界惩罚和独立性限制；当前尚无可引用的正式test结果。
-
-## 初始研究证据
-
-![确定性基线在真实validation上的误差曲线](assets/figures/baselines-validation-v1.png)
-
-本项目validation的12条源序列、103个重叠窗口，L=4，未来lead 1–24；先序列内平均，再对源序列等权。目标为CC BY 4.0源注释经过QC生成的派生区域，网格64×64，不是原始人工填充mask。两种基线无随机训练，因此图中没有seed误差带。
-
-**恒速没有在IoU上胜过Persistence。** H24的IoU分别为0.3521和0.3953；恒速在三个endpoint的面积MAE更低，但出现提前闭合的空边界失败，不能据此称总体更好。没有根据这些结果调参追分。[完整报告、失败案例与来源hash](docs/research/baselines-validation-v1.md)可查，神经模型和test结论仍待实测。
-
-## 神经模型的运行准备
-
-独立实现的NCA和summary-conditioned ConvGRU已通过数值、梯度及恢复检查，并已完成12次真实训练。[模型结构与训练合同](docs/architecture/forecast-models.md)、[冻结预算](docs/project/decisions/ADR-0002-local-models-and-training-budget.md)与[实际训练记录](docs/research/training-record-v1.md)公开说明输入、对照边界和每个checkpoint哈希。
-
-```sh
-# CPU路径；基础审计与数据浏览不需要安装这个extra
-uv sync --locked --extra cpu
-uv run --locked --extra cpu pytest -q tests/test_forecast_models.py tests/test_training.py
-
-# 准备好实际数据后训练一个seed；默认600步，checkpoint留在本地
-uv run --locked --extra cpu python scripts/train.py --model nca --seed 17
-```
-
-有兼容NVIDIA环境时可将`cpu`换成`cuda`。两种extra互斥；GPU可用性以运行检查为准，不从安装成功推断。恢复使用`--resume <原运行目录>/last.pt`，会验证数据、源码、模型和关键训练配置。
-
-公开仓库检查会验证本地文档链接并拦截部分敏感文件模式；它不能替代人工许可和秘密审查。远端同步可运行 `uv run --locked python scripts/verify_remote.py` 实时核对，不以缓存的 origin 状态代替。
-
-## 数据、许可与参考
-
-- [Backova 等，Zenodo 7660424](https://doi.org/10.5281/zenodo.7660424)：首选体内创面时序，API标注 CC BY 4.0，完整压缩包 MD5 已核对；标签与划分待审计。大型影像不进入 Git。
-- [GigaDB 100118](https://doi.org/10.5524/100118)：不同生物域的体外划痕实验，原始下载与许可待核查，不与果蝇指标混为一组。
-- [BBBC019](https://bbbc.broadinstitute.org/BBBC019)：静态图像辅助资源，不拼成伪造视频。
-- [Growing Neural Cellular Automata](https://distill.pub/2020/growing-ca/)，2020：局部规则、生长与再生的既有工作。
-- [Neural Cellular Automata Can Respond to Signals](https://arxiv.org/abs/2305.12971)，2023：条件响应的相邻工作。
-- [Modeling Wound Healing Using Vector Quantized Variational Autoencoders and Transformers](https://cvpd.github.io/publication/backova-2023-modeling/)，ISBI 2023：本数据体系上的视频预测工作。
-
-源码采用 [MIT License](LICENSE)。第三方数据、论文图片和模型权重遵循各自条款，源码许可证不授予它们的再分发权。
-
-## English overview
-
-MorphoLab studies wound-closure morphodynamics in real microscopy time series, comparing local neural cellular automata with classical and learned forecasting baselines. The domain is **in vivo Drosophila embryonic laser wounds**. Twelve real training runs are complete; test evaluation and the prediction workbench are in progress. Sequence groups are proxies for biological independence, and the split is our own protocol rather than the unavailable official mapping.
+源码 [MIT](LICENSE)，发布权重 CC BY 4.0 并保留训练数据署名，数据遵循各自条款。源码许可证不授予第三方数据的再分发权。引用软件见 [CITATION.cff](CITATION.cff)，引用研究数据仍应单独引用原作者。

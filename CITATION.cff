@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software, cite MorphoLab and separately cite the original dataset authors."
+type: software
+title: "MorphoLab: traceable wound-shape forecasting and research workbench"
+authors:
+  - name: "MorphoLab contributors"
+version: 0.1.0
+date-released: 2026-10-22
+repository-code: "https://github.com/fzyz-whx/morpholab"
+url: "https://github.com/fzyz-whx/morpholab"
+license: MIT
+abstract: >-
+  A local research workbench for historical annotation-conditioned shape forecasting
+  in in vivo Drosophila embryonic laser-wound microscopy. Includes audited data
+  preparation, classical baselines, local NCA and ConvGRU models, held-out
+  multiseed evaluation, negative ablations and persistent prediction jobs.
+keywords:
+  - neural cellular automata
+  - morphodynamics
+  - microscopy
+  - reproducible research

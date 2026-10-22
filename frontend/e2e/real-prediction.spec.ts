@@ -54,6 +54,11 @@ test('real NCA job persists, overlays the correct source frame and restores from
   await page.locator('.experiment-history li button').first().click();
   await expect(page.getByRole('slider', { name: '选择帧' })).toHaveValue('4');
   await expect(page.locator('.prediction-overlay')).toBeVisible();
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await expect(page.getByRole('img', { name: /WH01 第 4 帧/ })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.locator('.prediction-metrics h3').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: path.resolve('../artifacts/browser/studio-prediction-1280.png') });
   expect(errors).toEqual([]);
 });
 
@@ -64,4 +69,8 @@ test('real frozen research report exposes all leads and actual seed counts', asy
   await expect(page.locator('.research-results tbody tr')).toHaveCount(18);
   await page.getByRole('combobox', { name: '研究指标' }).selectOption('mean_boundary_distance');
   await expect(page.getByRole('img', { name: /平均边界距离/ })).toBeVisible();
+  await page.screenshot({
+    path: path.resolve('../artifacts/browser/research-real-v1.png'),
+    fullPage: false,
+  });
 });
