@@ -6,6 +6,10 @@
 
 MorphoLab 是一个可在本机运行的科研工作台，也是一组可复算的对照实验。它连接真实数据审计、严格的派生标签管线、经典基线、自主实现的 NCA 与 ConvGRU，以及带来源和失败记录的预测作业。当前版本为 **0.1.0 研究原型**，数据、研究与工作台闭环已验证；版本和资产状态见 [GitHub Release](https://github.com/fzyz-whx/morpholab/releases/tag/v0.1.0)。
 
+![工作台首页总览](assets/screenshots/overview-v1.png)
+
+首页总览：62 条真实显微时序（7,229 帧），从数据浏览、形态预测到研究报告的完整工作台。
+
 ![真实NCA预测工作台](assets/screenshots/studio-prediction-v1.png)
 
 实际 Edge、1440×900，WH01 历史 F0–3 → 预测 F4–27。WH01 属于 train，此图展示软件流程，不是泛化证据。灰度始终是 **OBSERVED** 原帧；浅色线是发布者 **ANNOTATION**，琥珀虚线是 **PREDICTION**。未来显微纹理没有由网络生成。影像来自 Backová 等（2023），[Zenodo 7660424](https://doi.org/10.5281/zenodo.7660424)，CC BY 4.0；修改包括对比度映射、放大、派生目标及预测叠加。[完整署名](datasets/ATTRIBUTION.md)。
